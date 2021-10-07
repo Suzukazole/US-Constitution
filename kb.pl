@@ -53,4 +53,11 @@ consist(congress,houseOfRepresentatives).
 % composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
 
 %Section 2
-
+elected_state(Name, HomeState, ElectedState).
+age_qualified(H,X) :- age(H,X), X >=25.
+citizen_qualified(H,Y) :- citizen(H,Y), Y >=7.
+state_qualified(H,X) :- elected_state(H,X,X).
+qualified([H|T],houseOfRepresentatives) :- age_qualified(H,X), citizen_qualified(H,Y), state_qualified(H,P,Q),qualified(T,houseOfRepresentatives).
+members(X) :- qualified([X|T],houseOfRepresentatives); member(X,T).
+consist(houseOfRepresentatives, members(X)).
+consist(houseOfRepresentatives, elector(X)).
