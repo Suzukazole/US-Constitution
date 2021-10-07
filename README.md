@@ -1,6 +1,7 @@
 # US-Constitution
+This is the repo for the course project in CS F214: Logic in Computer Science, Fall 2021.
 
-## Guidlines
+## Guidelines
 
 **Main branch shall only contain approved changes, do not push directly to it!**
 
