@@ -44,3 +44,14 @@ monday(2, 12, 2019).
 consist(congress,senate).
 consist(congress,houseOfRepresentatives).
 composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
+
+%Section 2
+elected_state(Name, HomeState, ElectedState).
+age_qualified(H,X) :- age(H,X), X >=25.
+citizen_qualified(H,Y) :- citizen(H,Y), Y >=7.
+state_qualified(H,X,Y) :- elected_state(H,X,Y), X\=Y.
+qualified([H|T],houseOfRepresentatives) :- age_qualified(H,X), citizen_qualified(H,Y), state_qualified(H,P,Q),qualified(T,houseOfRepresentatives).
+members(X) :- qualified([X|T],houseOfRepresentatives).
+consist(houseOfRepresentatives, members(X)).
+consist(houseOfRepresentatives, elector(X)).
+
