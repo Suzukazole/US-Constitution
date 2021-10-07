@@ -54,3 +54,24 @@ consist(congress,houseOfRepresentatives).
 
 %Section 2
 
+% Article 2
+% Section 1
+
+executivePower(president).
+term(president,4).
+term(vice_president,4).
+
+/* elector(X,Y) = houseOfRepresentatives(X,Z),senator(X,A),Y=Z+A.
+qualified([X|T],elector) :- post(X,Y), Y \=senator, Y\=representative, Y\=person_holding_office, Y\=person_earning_profit, qualified([X|T],elector).
+
+
+age_qualified(H,president) :- age(H,X), X >=35.
+citizen_qualified(H,president) :- citizen(H,Y), Y >=14.
+qualified([X|T],president) :- citizenship(X,natural_born),age_qualified(X,president),citizen_qualified(H,president).
+qualified(X|T,president) :- citizenship(X,citizen_at_adoption_constitution),age_qualified(X,president),citizen_qualified(H,president).
+
+removal(X,president) :- reason(X,death).
+removal(X,president) :- reason(X,resignation).
+removal(X,president) :- reason(X,inability_to_discharge).
+reelection(X,president) :- elect(X,congress), */
+
