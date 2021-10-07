@@ -53,11 +53,12 @@ consist(congress,houseOfRepresentatives).
 % composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
 
 %Section 2
+% age_qualified_HOR/2 holds if the age of first argument is atleast 25
 elected_state(Name, HomeState, ElectedState).
-age_qualified(H,X) :- age(H,X), X >=25.
-citizen_qualified(H,Y) :- citizen(H,Y), Y >=7.
-state_qualified(H,X) :- elected_state(H,X,X).
-qualified([H|T],houseOfRepresentatives) :- age_qualified(H,X), citizen_qualified(H,Y), state_qualified(H,P,Q),qualified(T,houseOfRepresentatives).
+age_qualified_HOR(H,X) :- age(H,X), X >=25.
+citizen_qualified_HOR(H,Y) :- citizen(H,Y), Y >=7.
+state_qualified_HOR(H,X) :- elected_state(H,X,X).
+qualified([H|T],houseOfRepresentatives) :- age_qualified_HOR(H,X), citizen_qualified_HOR(H,Y), state_qualified_HOR(H,P,Q),qualified(T,houseOfRepresentatives).
 members(X) :- qualified([X|T],houseOfRepresentatives); member(X,T).
 consist(houseOfRepresentatives, members(X)).
 consist(houseOfRepresentatives, elector(X)).
