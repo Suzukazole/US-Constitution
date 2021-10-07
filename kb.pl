@@ -41,17 +41,16 @@ monday(2, 12, 2019).
 
 % Article 1
 % Section 1
+
+% legislativePower/1 defines which body has legislative power
+% consist/2 has the body in second argument that is contained in first argument
+% composed/3 holds if the bodies in the second and third arguments are contained in the first
+
+legislativePower(congress).
+legislativePower(X) :- consist(Y,X), legislativePower(Y).
 consist(congress,senate).
 consist(congress,houseOfRepresentatives).
-composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
+% composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
 
 %Section 2
-elected_state(Name, HomeState, ElectedState).
-age_qualified(H,X) :- age(H,X), X >=25.
-citizen_qualified(H,Y) :- citizen(H,Y), Y >=7.
-state_qualified(H,X,Y) :- elected_state(H,X,Y), X\=Y.
-qualified([H|T],houseOfRepresentatives) :- age_qualified(H,X), citizen_qualified(H,Y), state_qualified(H,P,Q),qualified(T,houseOfRepresentatives).
-members(X) :- qualified([X|T],houseOfRepresentatives).
-consist(houseOfRepresentatives, members(X)).
-consist(houseOfRepresentatives, elector(X)).
 
