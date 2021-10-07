@@ -52,5 +52,10 @@ consist(congress,senate).
 consist(congress,houseOfRepresentatives).
 % composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
 
+% Section 4
+elections(time).
+elections(place).
+elections(manner).
+
 %Section 2
 
