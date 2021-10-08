@@ -10,3 +10,6 @@ This is the repo for the course project in CS F214: Logic in Computer Science, F
 - Comment out every functor's description at the start of each section. 
 - Send PR for your branch once you start, you can keep adding commits to it later.
 - Once everyone agrees, PRs will get merged(in order of sections).
+
+## References
+- https://www.annenbergclassroom.org/constitution/
