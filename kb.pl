@@ -46,19 +46,39 @@ monday(2, 12, 2019).
 % consist/2 has the body in second argument that is contained in first argument
 % composed/3 holds if the bodies in the second and third arguments are contained in the first
 
-legislativePower(congress).
-legislativePower(X) :- consist(Y,X), legislativePower(Y).
 consist(congress,senate).
 consist(congress,houseOfRepresentatives).
+legislativePower(congress).
+legislativePower(X) :- consist(Y,X), legislativePower(Y).
 % composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
 
+----------------------------------------------
+
 %Section 2
-% age_qualified_HOR/2 holds if the age of first argument is atleast 25
-elected_state(Name, HomeState, ElectedState).
+
+% elected/4 says X who is inhabitant of the state Y is elected by third argument to the state Z
+% age_qualified_HOR/2 holds if the age of first argument is atleast 25 years
+% citizen_qualified_HOR/2 holds if citizenship of first argument is at least 7 years
+% state_qualified_HOR/2 holds if first argument is elected by the people to the same state (fourth argument) the person lives in(second argument)
+% qualified/2 has the names of those in first argument who are qualified for an election/appointment for the position in second argument
+% members/1 conatins the list of people who qualify to be a representative
+% consist/2 has the body in second argument that is contained in first argument
+% term/2 states that the duration of the term for first argument is second argument number of years
+
+elected(X,Y,people,Z).
 age_qualified_HOR(H,X) :- age(H,X), X >=25.
 citizen_qualified_HOR(H,Y) :- citizen(H,Y), Y >=7.
-state_qualified_HOR(H,X) :- elected_state(H,X,X).
+state_qualified_HOR(H,X) :- elected(H,X,people,X).
 qualified([H|T],houseOfRepresentatives) :- age_qualified_HOR(H,X), citizen_qualified_HOR(H,Y), state_qualified_HOR(H,P,Q),qualified(T,houseOfRepresentatives).
 members(X) :- qualified([X|T],houseOfRepresentatives); member(X,T).
 consist(houseOfRepresentatives, members(X)).
-consist(houseOfRepresentatives, elector(X)).
+term(members(X),2).
+% consist(houseOfRepresentatives, elector(X)).
+
+
+----------------------------------------------
+
+% Section 3
+
+
+
