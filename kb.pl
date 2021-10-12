@@ -67,7 +67,7 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 % consist/2 has the body in second argument that is contained in first argument
 % term/2 states that the duration of the term for first argument is second argument number of years
 % stateOfUS/1 declares that the argument is a state of the US
-% meeting/3 says government body in first argument met for nth time (second argument) for that term in the year in third argument
+% meetingOfCongress/3 Arguments are date for when the congress should assemble
 % enum_done/1 puts time limit within which enumeration has to be done for that term
 % total/3 finds length of the list in first argument and puts it in third argument
 % num_representatives/1 has a list of number of representatives in each state, and gives upper and lower bounds on representation
@@ -83,8 +83,8 @@ consist(houseOfRepresentatives, members(X)).
 term(members(X),2).
 
 stateOfUS(rhodeisland).
-meeting(congress, first, Year).
-enum_done(X) :- meeting(congress, first, Year), X >= Year, X <= Year + 3, enum_done(Y), X - Y <= 10.
+meetingOfCongress(D, M, Year).
+enum_done(X) :- meetingOfCongress(D, M, Year), X >= Year, X <= Year + 3, enum_done(Y), X - Y <= 10.
 total([H|T], A, N) :- total(T, A-1, N).
 total([],A,A). 
 num_representatives(Y) :- Y = [H|T], H>=1, total(Y, 0, N), N <= *(/(1,30000), populationOfUS).
@@ -110,6 +110,59 @@ choose(houseOfRepresentatives, officers).
 % ----------------------------------------------
 
 % Section 8
+% Check this section
+% Functors used
+
+
+power(congress, lay(tax)).
+power(congress, collect(tax)).
+power(congress, lay(duties)).
+power(congress, collect(duties)).
+power(congress, lay(imposts)).
+power(congress, collect(imposts)).
+power(congress, lay(excises)).
+power(congress, collect(excises)).
+power(congress, pay(debts)).
+power(congress, provide(common_defence)).
+power(congress, provide(general_welfare)).
+
+% Check this once
+power(congress, borrow(money_on_credit_of_US)).
+
+% Check this once
+power(congress, regulate(commerce_with_foreign_nations)).
+power(congress, regulate(commerce_among_states)).
+power(congress, regulate(commerce_with_indian_tribes)).
+
+power(congress, coin(money)).
+power(congress, regulate(currency_value)).
+power(congress, fix(standard_weights)).
+power(congress, fix(standard_measures)).
+
+power(congress, define(piracies)).
+power(congress, punish(piracies)).
+power(congress, define(felonies_on_high_seas)).
+power(congress, punish(felonies_on_high_seas)).
+power(congress, define(offense_against_laws)).
+power(congress, punish(offense_against_laws)).
+
+power(congress, declare(war(X,Y))).
+power(congress, grant(letter_of_marque)).
+power(congress, grant(letter_of_reprisal)).
+power(congress, make_rules(caputures_on_land_and_water)).
+
+
+power(congress, raise(armies)).
+power(congress, support(armies)).
+
+power(congress, provide(navy)).
+power(congress, maintain(navy)).
+
+power(congress, make_rules(government)).
+power(congress, make_rules(regulate(land_forces))).
+power(congress, make_rules(regulate(navy))).
+
+
 
 
 
