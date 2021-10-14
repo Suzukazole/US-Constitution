@@ -52,10 +52,58 @@ consist(congress,senate).
 consist(congress,houseOfRepresentatives).
 % composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
 
+% Section 3
+
+noOfVotesPerSenator(1).
+noOfSenatorsPerState(2).
+durationOfSenator(6).
+senators(choosenBy(legislature)).
+senateOfUS(X, Y, Z, W) :-
+    senators(X),
+    noOfSenatorsPerState(Y),
+    noOfVotesPerSenator(Z),
+    durationOfSenator(W).
+
+firstClass(vacatedAt(secondYear)).
+secondClass(vacatedAt(fourthYear)).
+thirdClass(vacatedAt(sixthYear)).
+divisionOfSenate(X, Y, Z) :- firstClass(X), secondClass(Y), thirdClass(Z).
+vacancies(byResignation; recessOfLegislature).
+tempArrang(executive, vacancies, nextMeetingOfLegislature).
+
+age_qualified_Senator(S,X) :- age(S,X), X >=36.
+citizen_qualified_Senator(S,Y) :- citizen(S,Y), Y >=9.
+state_qualified_Senator(S,X) :- inhabitantOf(state).
+qualified_Senator([S,X,Y,Z]) :-
+    age_qualified_Senator(S,X),
+    citizen_qualified_Senator(S,Y),
+    state_qualified_Senator(S,Z).
+
+vPOTUS(presidentOf(senateOfUS)).
+votingVPOTUS(equalHouse).
+
+otherOfficers(absenceOf(vPOTUS); officeOFTPOTUS(vPOTUS)).
+presidentProTempore(absenceOf(vPOTUS)).
+
+powerOfImpeachement(senateOfUS, oath; affirmation, present(2/3rdOfMembers).).
+trialOfPOTUS(present(2/3rdOfMembers), present(chiefJustice)).
+
+successfulImpeachement(senator(X)) :-
+    removalFromOffice(X),
+    disqualification(X),
+    noTrust(X); noProfit(X).
+
+successfulImpeachement(party(X)) :-
+    indictment(X),
+    trial(X),
+    judgment(X),
+    punishment(X).
+
 % Section 4
-elections(time).
-elections(place).
-elections(manner).
 
-%Section 2
+legislature(elections(time), elections(place), elections(manner)).
+congress(elections(time), elections(place), elections(manner), notChoosing(senators)).
 
+assemblyOfCongress(X) :- 
+    (onceEveryYear(X), firstMondayOfDecember(X));
+    appointedByLaw(X).
