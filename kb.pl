@@ -110,9 +110,13 @@ choose(houseOfRepresentatives, officers).
 % ----------------------------------------------
 
 % Section 8
+
 % Check this section
 % Functors used
-
+% power/2 says the government body in the first argument has the power mentioned in the second argument
+% term/2 states that the duration of the term for first argument is second argument number of years
+% district/1 says that the argument is a district
+% area/2 says the area of first argument is the second argument
 
 power(congress, lay(tax)).
 power(congress, collect(tax)).
@@ -181,6 +185,18 @@ power(congress, provide(calling_militia(repel_invasions))).
 power(congress, provide(organinizing_militia)).
 power(congress, provide(arming_militia)).
 power(congress, provide(diciplining_militia)).
+
+district(X) :- area(X, A), X <= 10.
+power(congress, exerciseLegislation(district(X)).
+% Yet to finish
+
+power(congress, makelaws(execute_foregoing_powers)).
+power(congress, makelaws(power_vested_in_government)).
+
+% ----------------------------------------------
+
+% Section 10
+
 
 
 
