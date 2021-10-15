@@ -85,8 +85,8 @@ votingVPOTUS(equalHouse).
 otherOfficers(absenceOf(vPOTUS); officeOFTPOTUS(vPOTUS)).
 presidentProTempore(absenceOf(vPOTUS)).
 
-powerOfImpeachement(senateOfUS, oath; affirmation, present(2/3rdOfMembers).).
-trialOfPOTUS(present(2/3rdOfMembers), present(chiefJustice)).
+powerOfImpeachement(senateOfUS, oath; affirmation, present(twothirdOfMembers).).
+trialOfPOTUS(present(twothirdOfMembers), present(chiefJustice)).
 
 successfulImpeachement(senator(X)) :-
     removalFromOffice(X),
@@ -107,3 +107,43 @@ congress(elections(time), elections(place), elections(manner), notChoosing(senat
 assemblyOfCongress(X) :- 
     (onceEveryYear(X), firstMondayOfDecember(X));
     appointedByLaw(X).
+
+% Section 5
+
+judgeOfElections(house).
+returnsOfMembers(house).
+qualificationsOfMembers(house).
+quorumForBuisness(house, majority).
+adjournHouse(house, X) :- X < majority.
+absentMembers(house, penalties).
+
+rulesOfProceedings(house).
+punishMembers(house, disorderlyBehaviour).
+expelMember(house, disorderlyBehaviour, twothirdOfMembers).
+
+journalOfProceedings(house).
+publishJOP(house, notPublish(requireSecrecy), answersToQuestions(onefifthOfPresent)).
+
+adjournHouse(congress, consentOfOtherHouse, Place) :- Place =!= twoHousesSitting.
+adjournHouse(congress, Days, Place) :- 
+    Days<4,
+    Place =!= twoHousesSitting.
+
+% Section 6
+
+senators(compensation(ascertainedByLaw, paidByTreasury)).
+representatives(compensation(ascertainedByLaw, paidByTreasury)).
+priviligedFromArrest(attendanceAt, house).
+priviligedFromArrest(goingTo, house).
+priviligedFromArrest(returningFrom, house).
+priviligedFromArrest(speech, house).
+priviligedFromArrest(debate, house).
+priviligedFromArrest(except(treason)).
+priviligedFromArrest(except(felony)).
+priviligedFromArrest(except(breachOfPeace)).
+senators(priviligedFromArrest(X)).
+senators(questioned, house).
+
+appointmentToCivilOffice(notAllowed(senators, whileElected)).
+appointmentToCivilOffice(notAllowed(representatives, whileElected)).
+memberOfHouse(notAllowed(memberOfCivilOffice)).
