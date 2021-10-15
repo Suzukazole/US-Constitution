@@ -14,6 +14,16 @@ ID:
 
 % ----------- Facts copied for implementation of test cases---------------
 
+% Informs system that arguments of this predicate mught not be together
+
+:- discontiguous age/2.
+:- discontiguous citizen/2.
+:- discontiguous consist/2.
+:- discontiguous stateOfUS/1.
+:- discontiguous power/2.
+:- discontiguous nocoin/2.
+:- discontiguous nogrant/2.
+
 age(rohan, 23).
 citizen(rohan, 23).
 age(meera, 30).
@@ -84,10 +94,10 @@ term(members(X),2).
 
 stateOfUS(rhodeisland).
 meetingOfCongress(D, M, Year).
-enum_done(X) :- meetingOfCongress(D, M, Year), X >= Year, X <= Year + 3, enum_done(Y), X - Y <= 10.
+enum_done(X) :- meetingOfCongress(D, M, Year), X >= Year, =<(X, Year+3), enum_done(Y), =<(X-Y, 10).
 total([H|T], A, N) :- total(T, A-1, N).
 total([],A,A). 
-num_representatives(Y) :- Y = [H|T], H>=1, total(Y, 0, N), N <= *(/(1,30000), populationOfUS).
+num_representatives(Y) :- Y = [H|T], H>=1, total(Y, 0, N), =<(N,*(/(1,30000)) , populationOfUS).
 until_enum_representatives(stateOfUS(newHampshire), 3).
 until_enum_representatives(stateOfUS(massachusetts), 8).
 until_enum_representatives(stateOfUS(rhodeisland), 1).
@@ -102,7 +112,7 @@ until_enum_representatives(stateOfUS(northCarolina), 5).
 until_enum_representatives(stateOfUS(southCarolina), 5).
 until_enum_representatives(stateOfUS(georgia), 3).
 
-power(executive_authority, issueWritsOfElection) :- num_representatives(StateOfUs(X), Y), Y = 0.
+power(executive_authority, issueWritsOfElection) :- num_representatives(stateOfUS(X), Y), Y = 0.
 power(houseOfRepresentatives, impeachment(X)).
 choose(houseOfRepresentatives, speaker).
 choose(houseOfRepresentatives, officers).
@@ -168,8 +178,8 @@ power(congress, grant(letter_of_marque)).
 power(congress, grant(letter_of_reprisal)).
 power(congress, make_rules(caputures_on_land_and_water)).
 
-power(congress, raise(armies)) :- term(provide(raise(armies)), Y), Y<=2.
-power(congress, support(armies)) :- term(provide(support(armies)), Y), Y<=2.
+power(congress, raise(armies)) :- term(provide(raise(armies)), Y), =<(Y,2).
+power(congress, support(armies)) :- term(provide(support(armies)), Y), =<(Y,2).
 
 power(congress, provide(navy)).
 power(congress, maintain(navy)).
@@ -186,8 +196,8 @@ power(congress, provide(organinizing_militia)).
 power(congress, provide(arming_militia)).
 power(congress, provide(diciplining_militia)).
 
-district(X) :- area(X, A), X <= 10.
-power(congress, exerciseLegislation(district(X)).
+district(X) :- area(X, A), =<(X,10).
+power(congress, exerciseLegislation(district(X))).
 % Yet to finish
 
 power(congress, makelaws(execute_foregoing_powers)).
@@ -197,6 +207,52 @@ power(congress, makelaws(power_vested_in_government)).
 
 % Section 10
 
+% Functors used
+% notreaty/2 says two states won't enter into a treaty
+% noalliance/2 says two states won't enter into an alliance
+% noconfederation/2 says two states won't enter into a confederation
+% nogrant/2 says state in first argument won't grant the value in second argument
+% nocoin/2 says state in first argument won't coin the value in second argument
+% noemit/2 says state in first argument won't emit the value in second argument
+% nopass/2 says state in first argument won't pass the bill or law in second argument
+% lay/2 says state in first argument lays the second argument
+% useOfUStreasury/1 says that the argument is used for US Treasurey
+% keep/2 says state in first argument keeps the second argument
+% enter_agreement/2 says state in first argument enters into an agreement with the second argument which is a state or foreign power
+% enter_compact/2 says state in first argument enters into a compact with the second argument which is a state or foreign power
+% war/2 says the state in first argument declares war on the second argument which is a state or foreign power
+% consentOfCongress/1 says whether the congress has given consentOfCongress
+% invaded/3 says that the first argument was invaded by the second and third argument says if that is happened or not (true or false)
+% inspection_needed/1 says whether inspection is needed or not
+
+notreaty(X, Y) :- stateOfUS(X), stateOfUS(Y), X\=Y.
+noalliance(X,Y) :- stateOfUS(X), stateOfUS(Y), X\=Y.
+noconfederation(X,Y) :- stateOfUS(X), stateOfUS(Y), X\=Y.
+nogrant(X, letter_of_reprisal) :- stateOfUS(X).
+nogrant(X, letter_of_marque) :- stateOfUS(X).
+nocoin(X, money) :- stateOfUS(X).
+noemit(X, bill_of_credit) :- stateOfUS(X).
+nocoin(X, tender_in_payment_of_debt) :- stateOfUS(X).
+nopass(X, bill(attainder)) :- stateOfUS(X).
+nopass(X, bill(ex_post_facto_law)) :- stateOfUS(X).
+nopass(X, law(impairing_obligation_of_contracts)) :- stateOfUS(X).
+nogrant(X, title_of_nobility) :- stateOfUS(X).
+
+lay(X, imposts_on_imports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, inspection_needed(Inspection), Inspection = true.
+lay(X, imposts_on_exports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, inspection_needed(Inspection), Inspection = true.
+lay(X, duties_on_imports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, inspection_needed(Inspection), Inspection = true.
+lay(X, duties_on_exports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, inspection_needed(Inspection), Inspection = true.
+useOfUStreasury(netprod_of_imposts_and_duties_laid_by_state) :- lay(X, imposts_on_imports);
+                                                                lay(X, imposts_on_exports);
+                                                                lay(X, duties_on_imports);
+                                                                lay(X, duties_on_exports).
+
+lay(X, duty_of_tonnage) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, invaded(X,Y,Z), Z = true.
+keep(X, troops) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, invaded(X,Y,Z), Z = true.
+keep(X, ships_of_war) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, invaded(X,Y,Z), Z = true.
+enter_agreement(X,Y) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, invaded(X,Z,M), M = true.
+enter_compact(X,Y) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, invaded(X,Z,M), M = true.
+war(X, Y) :- stateOfUS(X), consentOfCongress(Congress), Consent = true, invaded(X,Y,Z), Z = true.
 
 
 
