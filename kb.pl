@@ -134,10 +134,23 @@ power(congress, regulate(commerce_with_foreign_nations)).
 power(congress, regulate(commerce_among_states)).
 power(congress, regulate(commerce_with_indian_tribes)).
 
+power(congress, establish(rule_of_naturalization)).
+power(congress, establish(rule_on_subject_of_bankruptcies)).
+
 power(congress, coin(money)).
 power(congress, regulate(currency_value)).
 power(congress, fix(standard_weights)).
 power(congress, fix(standard_measures)).
+
+power(congress, provide(punish(counterfeiting_securities))).
+power(congress, provide(punish(counterfeiting_current_coin))).
+
+power(congress, establish(post_offices)).
+power(congress, establish(post_roads)).
+power(congress, promote(progress_of_science)).
+power(congress, promote(progress_of_useful_arts)).
+
+power(congress, constitute(tribunals)).
 
 power(congress, define(piracies)).
 power(congress, punish(piracies)).
@@ -151,9 +164,8 @@ power(congress, grant(letter_of_marque)).
 power(congress, grant(letter_of_reprisal)).
 power(congress, make_rules(caputures_on_land_and_water)).
 
-
-power(congress, raise(armies)).
-power(congress, support(armies)).
+power(congress, raise(armies)) :- term(provide(raise(armies)), Y), Y<=2.
+power(congress, support(armies)) :- term(provide(support(armies)), Y), Y<=2.
 
 power(congress, provide(navy)).
 power(congress, maintain(navy)).
@@ -161,6 +173,14 @@ power(congress, maintain(navy)).
 power(congress, make_rules(government)).
 power(congress, make_rules(regulate(land_forces))).
 power(congress, make_rules(regulate(navy))).
+
+power(congress, provide(calling_militia(execute_laws_of_union))).
+power(congress, provide(calling_militia(suppress_insurrection))).
+power(congress, provide(calling_militia(repel_invasions))).
+
+power(congress, provide(organinizing_militia)).
+power(congress, provide(arming_militia)).
+power(congress, provide(diciplining_militia)).
 
 
 
