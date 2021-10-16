@@ -23,6 +23,7 @@ ID:
 :- discontiguous power/2.
 :- discontiguous nocoin/2.
 :- discontiguous nogrant/2.
+:- discontiguous lay/2.
 
 age(rohan, 23).
 citizen(rohan, 23).
@@ -49,7 +50,7 @@ stateOfUS(georgia).
 monday(7, 1, 2019).
 monday(2, 12, 2019).
 
-% Article 1
+% ARTICLE 1
 % Section 1
 
 % Functors used:
@@ -253,6 +254,14 @@ keep(X, ships_of_war) :- stateOfUS(X), consentOfCongress(Consent), Consent = tru
 enter_agreement(X,Y) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, invaded(X,Z,M), M = true.
 enter_compact(X,Y) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, invaded(X,Z,M), M = true.
 war(X, Y) :- stateOfUS(X), consentOfCongress(Congress), Consent = true, invaded(X,Y,Z), Z = true.
+
+% ----------------------------------------------
+
+% ARTICLE 5
+% Functors used
+
+
+% proposeAmendment(congress) :-  
 
 
 
