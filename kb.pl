@@ -147,3 +147,45 @@ senators(questioned, house).
 appointmentToCivilOffice(notAllowed(senators, whileElected)).
 appointmentToCivilOffice(notAllowed(representatives, whileElected)).
 memberOfHouse(notAllowed(memberOfCivilOffice)).
+
+
+% Article 3
+% Section 1
+
+judicialPower(supremeCourt).
+judicialPower(lowerCourts, ordain(congress)).
+compensation(basePay).
+judges(supremeCourt, goodBehaviour, compensation(X)) :- X > basePay .
+judges(lowerCourts, goodBehaviour, compensation(X)) :- X > basePay .
+
+% Section 2
+
+judicialPower(caseOflaw, appellateJurisdictionSC).
+judicialPower(caseOfequity, appellateJurisdictionSC).
+judicialPower(caseOfAmbassadors, supremeCourt).
+judicialPower(caseOfPublicMinister, supremeCourt).
+judicialPower(caseOfConsuls, supremeCourt).
+judicialPower(caseOfAdmirality, appellateJurisdictionSC).
+judicialPower(caseOfMaritime, appellateJurisdictionSC).
+judicialPower(controversiesOfUS, appellateJurisdictionSC).
+judicialPower(controveries, stateOfUS(X), stateOfUS(Y), supremeCourt) :- X =\= Y.
+judicialPower(controveries, stateOfUS(X), citizenOf(stateOfUS(Y)), supremeCourt).
+judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), citizenOf(stateOfUS(X))).
+judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), stateOfUS(Y)).
+judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), foreignState(Y)).
+judicialPower(landsOfDiffStates, stateOfUS(X), foreignState(Y), supremeCourt).
+
+jury(trialOfCrimes(X), stateOfUS(Y)) :- X =\= impeachement .
+jury(trialOfCrimes(X), foreignState(Y), congress) :- X =\= impeachement .
+
+% Section 3
+
+treasonAgainstUS(war).
+treasonAgainstUS(adheringToEnemies).
+treasonAgainstUS(adheringToEnemies, (aid; comfort)).
+convictOfTreason(testimonyOf(twoWitnesses), act).
+convictOfTreason(testimonyOf(twoWitnesses), confessionInOpenCourt).
+
+declarePunishmentOfTreason(congress).
+attainerOfTreason(cannotWork(corruptionOfBlood)).
+attainerOfTreason(cannotWork(forfeiture)).
