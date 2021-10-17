@@ -234,6 +234,28 @@ power(congress, makelaws(power_vested_in_government)).
 
 % ----------------------------------------------
 
+%Section 9
+migrationtostates(Y, Year) :- prohibition(0,Y, Year), =<(Year, 1808), tax_imposed(Y,Tax_paid), Tax_paid =< 10.
+susensionofWritofHabeasCorpus(X) :- rebellion(Y).
+notpassed(X) :-  billofAttainder(X).
+notpassed(X) :-  expostfactoLaw(X).
+notax(X) :- export(X, stateOfUS(Y)).
+nopreferenceshallbegiven(Y) :- port(Y, stateOfUS(X)).
+norevenueshallbegiven(Y) :- port(Y, stateOfUS(X)).
+nordutyshallbetaken(Y) :- shipbound(Z), port(Y,stateOfUS(X)).
+nomoneydrawnfromtreasury(X) = appropriationmadebylaw(X).
+publish(regularStatement).
+publish(accountoftheReceiptsandExpendituresofallpublicMoney).
+notitleofnobilitybyUS(Y).
+acceptOffice(X) :-person(officeofProfit(Y)),consentbycongresstoacceptoffice(X).
+acceptOffice(X) :-person(officeoftrust(Y)),consentbycongresstoacceptoffice(X).
+acceptTitle(X) :-person(officeofProfit(Y)),consentbycongresstoacceptTitle(X).
+acceptTitle(X) :-person(officeoftrust(Y)),consentbycongresstoacceptTitle(X).
+acceptEmolument(X) :-person(officeofProfit(Y)),consentbycongresstoacceptEmolument(X).
+acceptEmolument(X) :-person(officeoftrust(Y)),consentbycongresstoacceptEmolument(X).
+
+%__________________________________________________
+
 % ARTICLE 1 Section 10
 
 % Functors used
