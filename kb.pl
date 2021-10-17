@@ -62,7 +62,6 @@ consist(congress,senate).
 consist(congress,houseOfRepresentatives).
 legislativePower(congress).
 legislativePower(X) :- consist(Y,X), legislativePower(Y).
-% composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
 
 % ----------------------------------------------
 
@@ -70,8 +69,8 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 
 % Functors used:
 % elected/4 says X who is inhabitant of the state Y is elected by third argument to the state Z
-% age_qualified_HOR/2 holds if the age of first argument is atleast 25 years
-% citizen_qualified_HOR/2 holds if citizenship of first argument is at least 7 years
+% age_qualified_HOR/1 holds if the age of the argument is atleast 25 years
+% citizen_qualified_HOR/1 holds if citizenship of the argument is at least 7 years
 % state_qualified_HOR/2 holds if first argument is elected by the people to the same state (fourth argument) the person lives in(second argument)
 % qualified/2 has the names of those in first argument who are qualified for an election/appointment for the position in second argument
 % members/1 conatins the list of people who qualify to be a representative
@@ -85,14 +84,14 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 
 
 elected(X,Y,people,Z).
-age_qualified_HOR(H,X) :- age(H,X), X >=25.
-citizen_qualified_HOR(H,Y) :- citizen(H,Y), Y >=7.
-state_qualified_HOR(H,X) :- elected(H,X,people,X).
-qualified([H|T],houseOfRepresentatives) :- age_qualified_HOR(H,X), citizen_qualified_HOR(H,Y), state_qualified_HOR(H,P,Q),qualified(T,houseOfRepresentatives).
+age_qualified_HOR(H) :- age(H,X), X >=25.
+citizen_qualified_HOR(H) :- citizen(H,Y), Y >=7.
+state_qualified_HOR(H,X) :- stateOfUS(X), elected(H,X,people,X).
+qualified([], houseOfRepresentatives).
+qualified([H|T],houseOfRepresentatives) :- age_qualified_HOR(H), citizen_qualified_HOR(H), state_qualified_HOR(H,Q), qualified(T,houseOfRepresentatives).
 members(X) :- qualified([X|T],houseOfRepresentatives); member(X,T).
 consist(houseOfRepresentatives, members(X)).
 term(members(X),2).
-
 
 stateOfUS(rhodeisland).
 meetingOfCongress(D, M, Year).
