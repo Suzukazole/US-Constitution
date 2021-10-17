@@ -93,6 +93,7 @@ members(X) :- qualified([X|T],houseOfRepresentatives); member(X,T).
 consist(houseOfRepresentatives, members(X)).
 term(members(X),2).
 
+
 stateOfUS(rhodeisland).
 meetingOfCongress(D, M, Year).
 enum_done(X) :- meetingOfCongress(D, M, Year), X >= Year, =<(X, Year+3), enum_done(Y), =<(X-Y, 10).
