@@ -50,8 +50,7 @@ stateOfUS(georgia).
 monday(7, 1, 2019).
 monday(2, 12, 2019).
 
-% ARTICLE 1
-% Section 1
+% ARTICLE 1 Section 1
 
 % Functors used:
 % legislativePower/1 defines which body has legislative power
@@ -65,7 +64,7 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 
 % ----------------------------------------------
 
-%Section 2
+%ARTICLE 1 Section 2
 
 % Functors used:
 % elected/4 says X who is inhabitant of the state Y is elected by third argument to the state Z
@@ -92,6 +91,7 @@ qualified([H|T],houseOfRepresentatives) :- age_qualified_HOR(H), citizen_qualifi
 members(X) :- qualified([X|T],houseOfRepresentatives); member(X,T).
 consist(houseOfRepresentatives, members(X)).
 term(members(X),2).
+
 
 stateOfUS(rhodeisland).
 meetingOfCongress(D, M, Year).
@@ -120,7 +120,9 @@ choose(houseOfRepresentatives, officers).
 
 %--------------------------------------------------------
 
-%Section 7
+%ARTICLE 1 Section 7
+
+
 power(House of Representatives, raise(revenue_bills)).
 power(Senate, propose(amendments_bills)).
 power(Senate, concor(amendments_bills)).
@@ -152,7 +154,7 @@ no(vesseldutytootherstates, pay).
 
 % ----------------------------------------------
 
-% Section 8
+% ARTICLE 1 Section 8
 
 % Check this section
 % Functors used
@@ -238,7 +240,7 @@ power(congress, makelaws(power_vested_in_government)).
 
 % ----------------------------------------------
 
-% Section 10
+% ARTICLE 1 Section 10
 
 % Functors used
 % notreaty/2 says two states won't enter into a treaty
@@ -290,6 +292,7 @@ war(X, Y) :- stateOfUS(X), consentOfCongress(Congress), Consent = true, invaded(
 % ----------------------------------------------
 
 % ARTICLE 5
+
 % Functors used
 % twothirds/1 is true if at least two thirds of the 50 states are in the list (the argument)
 % threefourths/1 is true if at least three fourths of the 50 states are in the list (the argument)
@@ -305,6 +308,17 @@ proposeAmendment(congress, Amendment) :-  necessary(twothirds(senate), Amendment
 approveAmendment(Approved, Amendment) :- legislatureOfStates(threefourths(LegislatureOfStates),Approved), Approved = true.                        
 forbidAmendment(Amendment) :- amendmentpassed(Amendment, X, Y, Z), <=(Z, 1808).
 nodenyvote(State) :- stateOfUS(State), consent(State, Consent), Consent = false.
+
+% ----------------------------------------------
+
+% AMENDMENT 14 Section 1
+
+citizen(X, Y) :- natural_born(X), age(X, Y).
+
+
+
+
+
 
 
 
