@@ -63,13 +63,17 @@ senateOfUS(X, Y, Z, W) :-
     noOfSenatorsPerState(Y),
     noOfVotesPerSenator(Z),
     durationOfSenator(W).
+electors(requisiteQualifications).
 
 firstClass(vacatedAt(secondYear)).
 secondClass(vacatedAt(fourthYear)).
 thirdClass(vacatedAt(sixthYear)).
 divisionOfSenate(X, Y, Z) :- firstClass(X), secondClass(Y), thirdClass(Z).
-vacancies(byResignation; recessOfLegislature).
-tempArrang(executive, vacancies, nextMeetingOfLegislature).
+% vacancies(byResignation; recessOfLegislature).
+% tempArrang(executive, vacancies, nextMeetingOfLegislature).
+tempArrang(legislature, stateOfUS(Y)).
+vacancies(senateOfUS(state), executiveAuthority(issueWrits), tempArrang(X)).
+fillVacancies(legislature).
 
 age_qualified_Senator(S,X) :- age(S,X), X >=36.
 citizen_qualified_Senator(S,Y) :- citizen(S,Y), Y >=9.
@@ -105,7 +109,7 @@ legislature(elections(time), elections(place), elections(manner)).
 congress(elections(time), elections(place), elections(manner), notChoosing(senators)).
 
 assemblyOfCongress(X) :- 
-    (onceEveryYear(X), firstMondayOfDecember(X));
+    (onceEveryYear(X), thirdDayOfJan(X), time(noon(X)));
     appointedByLaw(X).
 
 % Section 5
@@ -172,8 +176,8 @@ judicialPower(controveries, stateOfUS(X), stateOfUS(Y), supremeCourt) :- X =\= Y
 judicialPower(controveries, stateOfUS(X), citizenOf(stateOfUS(Y)), supremeCourt).
 judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), citizenOf(stateOfUS(X))).
 judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), stateOfUS(Y)).
-judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), foreignState(Y)).
-judicialPower(landsOfDiffStates, stateOfUS(X), foreignState(Y), supremeCourt).
+% judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), foreignState(Y)).
+% judicialPower(landsOfDiffStates, stateOfUS(X), foreignState(Y), supremeCourt).
 
 jury(trialOfCrimes(X), stateOfUS(Y)) :- X =\= impeachement .
 jury(trialOfCrimes(X), foreignState(Y), congress) :- X =\= impeachement .
