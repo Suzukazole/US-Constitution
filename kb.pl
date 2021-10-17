@@ -222,9 +222,9 @@ power(congress, makelaws(power_vested_in_government)).
 % enter_agreement/2 says state in first argument enters into an agreement with the second argument which is a state or foreign power
 % enter_compact/2 says state in first argument enters into a compact with the second argument which is a state or foreign power
 % war/2 says the state in first argument declares war on the second argument which is a state or foreign power
-% consentOfCongress/1 says whether the congress has given consentOfCongress
+% consentOfCongress/1 says whether the congress has given consent
 % invaded/3 says that the first argument was invaded by the second and third argument says if that is happened or not (true or false)
-% inspection_needed/1 says whether inspection is needed or not
+% necessary/3 says whether first argument considers the second argument is necessary or not
 
 notreaty(X, Y) :- stateOfUS(X), stateOfUS(Y), X\=Y.
 noalliance(X,Y) :- stateOfUS(X), stateOfUS(Y), X\=Y.
@@ -239,10 +239,10 @@ nopass(X, bill(ex_post_facto_law)) :- stateOfUS(X).
 nopass(X, law(impairing_obligation_of_contracts)) :- stateOfUS(X).
 nogrant(X, title_of_nobility) :- stateOfUS(X).
 
-lay(X, imposts_on_imports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, inspection_needed(Inspection), Inspection = true.
-lay(X, imposts_on_exports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, inspection_needed(Inspection), Inspection = true.
-lay(X, duties_on_imports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, inspection_needed(Inspection), Inspection = true.
-lay(X, duties_on_exports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, inspection_needed(Inspection), Inspection = true.
+lay(X, imposts_on_imports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, necessary(congress, inspection, Inspection), Inspection = true.
+lay(X, imposts_on_exports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, necessary(congress, inspection, Inspection), Inspection = true.
+lay(X, duties_on_imports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, necessary(congress, inspection, Inspection), Inspection = true.
+lay(X, duties_on_exports) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, necessary(congress, inspection, Inspection), Inspection = true.
 useOfUStreasury(netprod_of_imposts_and_duties_laid_by_state) :- lay(X, imposts_on_imports);
                                                                 lay(X, imposts_on_exports);
                                                                 lay(X, duties_on_imports);
@@ -259,10 +259,20 @@ war(X, Y) :- stateOfUS(X), consentOfCongress(Congress), Consent = true, invaded(
 
 % ARTICLE 5
 % Functors used
+% twothirds/1 is true if at least two thirds of the 50 states are in the list (the argument)
+% threefourths/1 is true if at least three fourths of the 50 states are in the list (the argument)
+% proposeAmendment/2 says that congress can propose the amendment in the second argument (denoted by amendment number) or not
+% approveAmendment/2 says if the amendment in the secondargument (denoted by amendment number) is approved or not.
+% forbidAmendment/1 says the amendment is forbid
+% nodenyvote/1 says the state can't be denied vote
 
-
-% proposeAmendment(congress) :-  
-
+twothirds(States) :- length(States, L), >=(L,34).
+threefourths(States) :- length(States, L), >=(L,38).
+proposeAmendment(congress, Amendment) :-  necessary(twothirds(senate), Amendment, Necessary), necessary(twothirds(houseOfRepresentatives), Amendment, Necessary), Necessary = true;
+                               callForConstitutionalConvention(twothirds(States), Called), Called = true.
+approveAmendment(Approved, Amendment) :- legislatureOfStates(threefourths(LegislatureOfStates),Approved), Approved = true.                        
+forbidAmendment(Amendment) :- amendmentpassed(Amendment, X, Y, Z), <=(Z, 1808).
+nodenyvote(State) :- stateOfUS(State), consent(State, Consent), Consent = false.
 
 
 
