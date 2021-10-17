@@ -69,6 +69,8 @@ firstClass(vacatedAt(secondYear)).
 secondClass(vacatedAt(fourthYear)).
 thirdClass(vacatedAt(sixthYear)).
 divisionOfSenate(X, Y, Z) :- firstClass(X), secondClass(Y), thirdClass(Z).
+
+% Changes due to Amendment XVII
 % vacancies(byResignation; recessOfLegislature).
 % tempArrang(executive, vacancies, nextMeetingOfLegislature).
 tempArrang(legislature, stateOfUS(Y)).
@@ -109,7 +111,7 @@ legislature(elections(time), elections(place), elections(manner)).
 congress(elections(time), elections(place), elections(manner), notChoosing(senators)).
 
 assemblyOfCongress(X) :- 
-    (onceEveryYear(X), thirdDayOfJan(X), time(noon(X)));
+    (onceEveryYear(X), thirdDayOfJan(X), time(noon(X))); % Changes due to Amendment XX Section 2
     appointedByLaw(X).
 
 % Section 5
@@ -176,6 +178,8 @@ judicialPower(controveries, stateOfUS(X), stateOfUS(Y), supremeCourt) :- X =\= Y
 judicialPower(controveries, stateOfUS(X), citizenOf(stateOfUS(Y)), supremeCourt).
 judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), citizenOf(stateOfUS(X))).
 judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), stateOfUS(Y)).
+
+% Changes due to Amendment XI
 % judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), foreignState(Y)).
 % judicialPower(landsOfDiffStates, stateOfUS(X), foreignState(Y), supremeCourt).
 
@@ -193,3 +197,93 @@ convictOfTreason(testimonyOf(twoWitnesses), confessionInOpenCourt).
 declarePunishmentOfTreason(congress).
 attainerOfTreason(cannotWork(corruptionOfBlood)).
 attainerOfTreason(cannotWork(forfeiture)).
+
+% Preamble to the Bill of Rights
+
+assemblyOfCongress(place(newYork), day(wednesday), date(D, M, Y)) :- D =:= 4, M =:= march, Y =:= 1789.
+conventions([H|T]) :- stateOfUS(H), conventions(T).
+conventions(preventMisconstruction, addClauses).
+conventions(preventAbuseOfPower, addClauses).
+
+resolvedBy(senateOfUS, houseOfRepresentatives, assemblyOfCongress, bothHouses(twothirdOfMembers)).
+proposedTo(legislature(stateOfUS(X)), amendments, ratifiedBy(threefourthOfLegislatures)).
+
+articles(proposedBy(congress), ratifiedBy(legislatureOf(stateOfUS(X)))).
+
+% Amendment I
+
+powerless(congress, establishmentOfReligion).
+powerless(congress, prohibitionOf(freeExcersiseOfReligion)).
+right(people, freedomOfSpeech).
+right(people, freedomOfPress).
+right(people, freedomToPeacefullyAssemble).
+right(people, petitionFor(redressOfGrievances)).
+
+% Amendment II
+
+right(people, keepAndBearArms).
+
+% Amendment III
+
+right(soldier, timeOfPeace(cannot(quartaredInHouse))).
+right(soldier, timeOfPeace(permissionOfOwner(quartaredInHouse))).
+right(soldier, timeOfWar(cannot(quartaredInHouse))).
+right(soldier, timeOfWar(permissionOfOwner(quartaredInHouse))).
+
+% Amendment IV
+
+secure(inTheirPersons).
+secure(inTheirHouses).
+secure(ofTheirPapers).
+right(people, secure(X)).
+powerless(government, unreasonableSearchesAndSeizures).
+powerless(government, warrants).
+supportedBy(oaths).
+supportedBy(affirmation).
+havePower(government, warrants, supportedBy(X)).
+
+% Amendment V
+
+required(grandJury, seriousCriminalCharges).
+inService(war).
+inService(publicDanger).
+right(people, inService(X), noTrial).
+right(people, sameOffence, noTrial).
+right(people, againstSelfIncrimination, noTrial).
+right(people, witnessAgainstHimself).
+right(people, life).
+right(people, liberty).
+right(people, property).
+
+% Amendment VI
+
+right(accused, speedyAndPublicTrial).
+right(accused, trialByAnImpartialJury, in(stateOfUS(district(X)))).
+right(accused, informationAboutNatureAndCauseOfAccusation).
+right(accused, confrontedWithWitnessesAgainstHim).
+right(accused, obtainWitnessesInHisFavour).
+right(accused, assistanceOfDefenceCounsel).
+
+% Amendment VII
+
+controversy(X).
+right(people, trialByJury, controversy(X)) :- X > 20.
+
+% Amendment VIII
+
+notRequired(excessiveBail).
+notRequired(excessiveFines).
+notRequired(cruelPunishments).
+notRequired(unusualPunishmnets).
+right(people, notRequired(X)).
+
+% Amendment IX
+
+right(people, deny, retainedBy(otherPeople)).
+right(people, disparage, retainedBy(otherPeople)).
+
+% Amendment X
+
+reservedTo(stateOfUS(X)).
+reservedTo(people).
+powerNotDelegatedtoUS(byConstitution, reservedTo(X)).
