@@ -24,6 +24,8 @@ ID:
 :- discontiguous nocoin/2.
 :- discontiguous nogrant/2.
 :- discontiguous lay/2.
+:- discontiguous amendmentpassed/4.
+:- discontiguous amendmentapproved/4.
 
 age(rohan, 23).
 citizen(rohan, 23).
@@ -88,6 +90,7 @@ citizen_qualified_HOR(H) :- citizen(H,Y), Y >=7.
 state_qualified_HOR(H,X) :- stateOfUS(X), elected(H,X,people,X).
 qualified([], houseOfRepresentatives).
 qualified([H|T],houseOfRepresentatives) :- age_qualified_HOR(H), citizen_qualified_HOR(H), state_qualified_HOR(H,Q), qualified(T,houseOfRepresentatives).
+
 members(X) :- qualified([X|T],houseOfRepresentatives); member(X,T).
 consist(houseOfRepresentatives, members(X)).
 term(members(X),2).
@@ -123,7 +126,7 @@ choose(houseOfRepresentatives, officers).
 %ARTICLE 1 Section 7
 
 
-power(House of Representatives, raise(revenue_bills)).
+power(HouseofRepresentatives, raise(revenue_bills)).
 power(Senate, propose(amendments_bills)).
 power(Senate, concor(amendments_bills)).
 Bill_to_law(X) :- bill_passed(houseOfRepresentatives,X), bill_passed(senate,X), bill_passed(president,X).
@@ -313,7 +316,26 @@ nodenyvote(State) :- stateOfUS(State), consent(State, Consent), Consent = false.
 
 % AMENDMENT 14 Section 1
 
+amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
+amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
+
 citizen(X, Y) :- natural_born(X), age(X, Y).
+notenforce(X, Law) :- stateOfUS(X), abridges_privelegies(citizen(_,_), Abridges), abridges_immunities(citizen(_,_), Abridges), Abridges = true.
+notmakelaw(X, Law)) :- stateOfUS(X), abridges_privelegies(citizen(_,_), Abridges), abridges_immunities(citizen(_,_), Abridges), Abridges = true.
+deprive(X, citizen(_,_), life) :- stateOfUS(X), process_of_law(Processed), Processed = true.
+deprive(X, citizen(_,_), liberty) :- stateOfUS(X), process_of_law(Processed), Processed = true.
+deprive(X, citizen(_,_), property) :- stateOfUS(X), process_of_law(Processed), Processed = true.
+deprive(X, citizen(_,_), equal_protection_of_law) :- stateOfUS(X), process_of_law(Processed), Processed = true.
+
+% ----------------------------------------------
+
+% AMENDMENT 14 Section 2
+
+amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
+amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
+
+
+
 
 
 
