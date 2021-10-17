@@ -39,8 +39,7 @@ stateOfUS(georgia).
 monday(7, 1, 2019).
 monday(2, 12, 2019).
 
-% Article 1
-% Section 1
+% Article 1 Section 1
 
 % legislativePower/1 defines which body has legislative power
 % consist/2 has the body in second argument that is contained in first argument
@@ -52,7 +51,32 @@ consist(congress,senate).
 consist(congress,houseOfRepresentatives).
 % composed(X,Y,Z) :- consist(X,Y), consist(X,Z).
 
-% Section 3
+% Article 1 Section 3
+
+% noOfVotesPerSenator/1 specifies the number of votes a senator can cast 
+% noOfSenatorsPerState/1 specifies the number of senators per state
+% durationOfSenator/1 specifies the duration of years a person will serve as a senator
+% senator/1 refers to senators
+% choosenBy/1 implies selected by the variable passed
+% senateOfUS/4 checks validity of the whole senate
+% electors/1 checks requisite qualifications
+% firstClass/1 checks if there have been vacancies after specified years
+% vacatedAt/1 checks the year of vacancy
+% divisionOfSenate/3 checks the division of senate
+% tempArrang/2 basic requisite for temporary arrangements 
+% vacancies/3 checks all the conditions required to fill a vacancy
+% fillVacancies/1 the filled vacancy has been allowed by the passed variable
+% age_qualified_Senatot/2 holds if the age of first argument is atleast 36 years
+% citizen_qualified_Senator/2 holds if citizenship of first argument is at least 9 years
+% state_qualified_Senator/2 holds if first argument is elected by the people to the same state (fourth argument) the person lives in(second argument)
+%  qualified_Senator/1 has the names of those in first argument who are qualified for an election/appointment for the position in second argument
+% vPOTUS/1 specifies vice president of the US 
+% votingVPOTUS/1 specifies the voting power of the vice president
+% otherOfficers/1 votes of other officers when required
+% powerOfImpeachement/3 conditions required for an impeachement to take place
+% trialOfPOTUS/2 conditions required for a trial of the president of the US
+% successfulImpeachement/1 actions taken after successful impeachement
+
 
 noOfVotesPerSenator(1).
 noOfSenatorsPerState(2).
@@ -91,7 +115,7 @@ votingVPOTUS(equalHouse).
 otherOfficers(absenceOf(vPOTUS); officeOFTPOTUS(vPOTUS)).
 presidentProTempore(absenceOf(vPOTUS)).
 
-powerOfImpeachement(senateOfUS, oath; affirmation, present(twothirdOfMembers).).
+powerOfImpeachement(senateOfUS, (oath; affirmation), present(twothirdOfMembers).).
 trialOfPOTUS(present(twothirdOfMembers), present(chiefJustice)).
 
 successfulImpeachement(senator(X)) :-
@@ -105,7 +129,11 @@ successfulImpeachement(party(X)) :-
     judgment(X),
     punishment(X).
 
-% Section 4
+% Article 1 Section 4
+
+% legislature/3 pertaining to elections conducted
+% congress/3 pertaining to elections conducted
+% assemblyOfCongress/1 procedings when the congress assembels 
 
 legislature(elections(time), elections(place), elections(manner)).
 congress(elections(time), elections(place), elections(manner), notChoosing(senators)).
@@ -114,7 +142,19 @@ assemblyOfCongress(X) :-
     (onceEveryYear(X), thirdDayOfJan(X), time(noon(X))); % Changes due to Amendment XX Section 2
     appointedByLaw(X).
 
-% Section 5
+% Article 1 Section 5
+
+% judgeOfElections/1 checks for presence in house
+% returnsOfMembers/1 checks for presence in house
+% qualificationsOfMembers/1 checks for presence in house
+% quorumForBuisness/2 checks for presence in house and its majority
+% adjournHouse/2 to check if the house should be adjourned
+% absentMembers/2 checks for presence in house and penalise if absent 
+% rulesOfProceedings/1 checks for rules of house
+% punishMembers/2 checks for presence in house and punishes members exhibiting disorderly behaviour
+% journalOfProceedings/1 note down the events in house
+% publishJOP/3 publish the events in house
+% adjournHouse/3 conditions to adjourn the house
 
 judgeOfElections(house).
 returnsOfMembers(house).
@@ -135,7 +175,12 @@ adjournHouse(congress, Days, Place) :-
     Days<4,
     Place =!= twoHousesSitting.
 
-% Section 6
+% Article 1 Section 6
+
+% senators/1 the monetary compensation received by senators, priviliged from arrest and being questioned
+% representatives/1 the monetary compensation received by representatives
+% priviligedFromArrest/2 conditions which provide immunity from arrest 
+% appointmentToCivilOffice/1 to check if a person can be appointment To Civil Office
 
 senators(compensation(ascertainedByLaw, paidByTreasury)).
 representatives(compensation(ascertainedByLaw, paidByTreasury)).
@@ -155,8 +200,11 @@ appointmentToCivilOffice(notAllowed(representatives, whileElected)).
 memberOfHouse(notAllowed(memberOfCivilOffice)).
 
 
-% Article 3
-% Section 1
+% Article 3 Section 1
+
+% judicialPower/2 is the judicial Power given to different courts 
+% compensation/1 salary received by judges
+% judges/3 positions of a judge 
 
 judicialPower(supremeCourt).
 judicialPower(lowerCourts, ordain(congress)).
@@ -164,7 +212,9 @@ compensation(basePay).
 judges(supremeCourt, goodBehaviour, compensation(X)) :- X > basePay .
 judges(lowerCourts, goodBehaviour, compensation(X)) :- X > basePay .
 
-% Section 2
+% Article 3 Section 2
+
+% jury/2 checks for the opinion of the jury 
 
 judicialPower(caseOflaw, appellateJurisdictionSC).
 judicialPower(caseOfequity, appellateJurisdictionSC).
@@ -186,7 +236,12 @@ judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), stateOfUS(Y)).
 jury(trialOfCrimes(X), stateOfUS(Y)) :- X =\= impeachement .
 jury(trialOfCrimes(X), foreignState(Y), congress) :- X =\= impeachement .
 
-% Section 3
+% Article 3 Section 3
+
+% treasonAgainstUS/1 treasons against US 
+% convictOfTreason/2 convicts a person of treason
+% declarePunishmentOfTreason/1 the body having the power to declare punishment of treason
+% attainerOfTreason/1 effects of being convicted of treason 
 
 treasonAgainstUS(war).
 treasonAgainstUS(adheringToEnemies).
@@ -200,6 +255,12 @@ attainerOfTreason(cannotWork(forfeiture)).
 
 % Preamble to the Bill of Rights
 
+% assemblyOfCongress/3 conditions required for assembly Of Congress
+% conventions/2 conventions followed by judicial bodies
+% resolvedBy/4 resolving issues between different judicial bodies pertaining to amendments
+% proposedTo/3 amendments proposed to 
+% articles/2 conditions for a article to be passed
+
 assemblyOfCongress(place(newYork), day(wednesday), date(D, M, Y)) :- D =:= 4, M =:= march, Y =:= 1789.
 conventions([H|T]) :- stateOfUS(H), conventions(T).
 conventions(preventMisconstruction, addClauses).
@@ -211,6 +272,9 @@ proposedTo(legislature(stateOfUS(X)), amendments, ratifiedBy(threefourthOfLegisl
 articles(proposedBy(congress), ratifiedBy(legislatureOf(stateOfUS(X)))).
 
 % Amendment I
+
+% powerless/2 cases where an individual or an institution does not have any influence
+% right/2 rights available to citizens of the US 
 
 powerless(congress, establishmentOfReligion).
 powerless(congress, prohibitionOf(freeExcersiseOfReligion)).
@@ -232,6 +296,9 @@ right(soldier, timeOfWar(permissionOfOwner(quartaredInHouse))).
 
 % Amendment IV
 
+% secure/1 cases when an individual or an institution has immunity
+% supportedBy/1 supported By these laws
+
 secure(inTheirPersons).
 secure(inTheirHouses).
 secure(ofTheirPapers).
@@ -243,6 +310,8 @@ supportedBy(affirmation).
 havePower(government, warrants, supportedBy(X)).
 
 % Amendment V
+
+% required/2 conditions required to conduct a trial against serious Criminal Charges
 
 required(grandJury, seriousCriminalCharges).
 inService(war).
@@ -270,6 +339,8 @@ controversy(X).
 right(people, trialByJury, controversy(X)) :- X > 20.
 
 % Amendment VIII
+
+% notRequired/1 cases where certain actions are not required 
 
 notRequired(excessiveBail).
 notRequired(excessiveFines).
