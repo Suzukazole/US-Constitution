@@ -84,10 +84,14 @@ notElector(Person) :- senator(Person); representative(Person).
 
 
 % Ammendment 12
-votes(elector, president).
-votes(elector, vice_president).
+votes(elector, "President").
+votes(elector, "Vice president").
+maxPresidentVotes(Person, "President").
+maxVicePresidentVotes(Person, "Vice president").
+eligible_for_vicePresident(Person):- eligible_for_president(Person).
 
 % Ammendment 20 section 3
+
 
 
 citizenEligible(Person):- citizen(Person, Y), Y>=14.
@@ -98,5 +102,10 @@ eligible_for_president(Person) :-
     ageEligible(Person).
 
 % ammendment 25.
+
+
+compensation(president).
+oathPresident("I do solemnly swear (or affirm) that I will faithfully execute the Office of President of the United States, and will to the best of my Ability, preserve, protect and defend the Constitution of the United States").
+
 
     
