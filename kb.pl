@@ -27,7 +27,7 @@ ID:
 :- discontiguous amendmentpassed/4.
 :- discontiguous amendmentapproved/4.
 :- discontiguous sum/3.
-:- discontiguous right/3.
+:- discontiguous right/2.
 
 age(rohan, 23).
 citizen(rohan, 23).
@@ -85,8 +85,10 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 % total/3 finds length of the list in first argument and puts it in third argument
 % num_representatives/1 has a list of number of representatives in each state, and gives upper and lower bounds on representation
 % sum/3 calculates the sum elements of the list in first argument using accumulator in second argument and saves result in last argument
-% right/3 states that the right in first argument holds for second argument, with the third argument telling whether the right is denied or not (true if denied)
+% right/2 states that the right in first argument holds for second argument
 % male/1 holds if the person (name in argument) is a male
+% denied/2 holds if the right in first argument is denied on account of second argument
+% notdenied/2 holds if the right in first argument can't be denied on account of second argument
 
 elected(X,Y,people,Z).
 age_qualified_HOR(H) :- age(H,X), X >=25.
@@ -103,18 +105,18 @@ term(members(X),2).
 
 sum([No_of_FreePersons, No_of_Indians_not_taxed], 0, CountOfRepresentatives).
 
-right(A,B,C).
+right(A,B).
 
-% Changes due to Amendment 26 Section 2
-right(vote_elect(X), Y, false) :- citizen(Y,_), age(Y, Age), Age >= 18.
+% Changes due to Amendment 26 Section 1
+notdenied(right(vote_elect(X), Y), on_account_of_age) :- citizen(Y,Z), age(Y, Age), Age >= 18.
 
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(elector_for_Vice_President), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(elector_for_President), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(representative_in_congress), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(executive_officers), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(judicial_officers), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(members_of_legislature), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(members_of_legislature), X, Y), Y = true.
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(elector_for_President), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(elector_for_Vice_President), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(representative_in_congress), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(executive_officers), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(judicial_officers), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(members_of_legislature), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(members_of_legislature), X), Y).
 sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
 
 stateOfUS(rhodeisland).
@@ -327,8 +329,9 @@ enter_compact(X,Y) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, 
 war(X, Y) :- stateOfUS(X), consentOfCongress(Congress), Consent = true, invaded(X,Y,Z), Z = true.
 
 % ----------------------------------------------
-%Article 4
-Section 1
+
+%ARTICLE 4 Section 1
+
 faithandcredit(X,publicact(Z),Y):- stateOfUS(X),stateOfUS(Y).
 faithandcredit(X,records(Z),Y):- stateOfUS(X),stateOfUS(Y).
 faithandcredit(X,judicialproceeding(Z),Y):- stateOfUS(X),stateOfUS(Y).
@@ -336,13 +339,19 @@ congressmannertoprove(acts).
 congressmannertoprove(records).
 congressmannertoprove(proceedings).
 
-Section 2
+% ----------------------------------------------
+
+% ARTICLE 4 Section 2
+
 privileges(X) :-citizen(X,_).
 immunities(X) :-citizen(X,_).
 crime(X,Y) :- deliver(X,Y)
 deliver(X,Y) :- found(X,Z), demand(executiveauthority(Y))
 
-Section 3
+% ----------------------------------------------
+
+% ARTICLE 4 Section 3
+
 power(congress,admit(newstatesintounion)).
 statesformation(X):-withinjurisdiction(X)
 statesformation(X):-nojunctionofstates(X). 
@@ -351,7 +360,10 @@ nojunctionofstates(X) :-newstateconsentfromotherstateslegislatures(X).
 power(congress,disposeofRulesandRegulationsrespectingtheTerritoryorotherPropertybelongingtotheUnitedStates).
 power(congress,makeallneedfulRulesandRegulationsrespectingtheTerritoryorotherPropertybelongingtotheUnitedStates).
 
-Section 4
+% ----------------------------------------------
+
+% ARTICLE 4 Section 4
+
 guaranteerepublicformofgovernment(X) :- stateOfUS(X).
 protectionAgainstInvasion(X) :-stateOfUS(X).
 protectionAgainstDomesticViolence(X) :- applicationforprotectionAgainstDomesticViolence(legislature,Y,1), stateOfUS(Y). 
@@ -387,19 +399,19 @@ nodenyvote(State) :- stateOfUS(State), consent(State, Consent), Consent = false.
 % natural_born/1 states that person X is natural_born in US
 % notenforce/2 states that first argument can't enforce law in second argument
 % notmakelaw/2 states that first argument can't make law in second argument
-% deprive/3 states that first argument can't deprive third argument to second argument
+% deprive/3 states that first argument deprives second argument of third argument
 
 
 amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
 amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
 
 citizen(X, Y) :- natural_born(X), age(X, Y).
-notenforce(X, Law) :- stateOfUS(X), abridges_privelegies(citizen(_,_), Abridges), abridges_immunities(citizen(_,_), Abridges), Abridges = true.
-notmakelaw(X, Law) :- stateOfUS(X), abridges_privelegies(citizen(_,_), Abridges), abridges_immunities(citizen(_,_), Abridges), Abridges = true.
-deprive(X, citizen(_,_), life) :- stateOfUS(X), process_of_law(Processed), Processed = true.
-deprive(X, citizen(_,_), liberty) :- stateOfUS(X), process_of_law(Processed), Processed = true.
-deprive(X, citizen(_,_), property) :- stateOfUS(X), process_of_law(Processed), Processed = true.
-deprive(X, citizen(_,_), equal_protection_of_law) :- stateOfUS(X), process_of_law(Processed), Processed = true.
+notenforce(X, Law) :- stateOfUS(X), abridges_privelegies(citizen(A,B), Abridges), abridges_immunities(citizen(A,B), Abridges), Abridges = true.
+notmakelaw(X, Law) :- stateOfUS(X), abridges_privelegies(citizen(A,B), Abridges), abridges_immunities(citizen(A,B), Abridges), Abridges = true.
+deprive(X, citizen(A,B), life) :- stateOfUS(X), process_of_law(Processed), Processed = true.
+deprive(X, citizen(A,B), liberty) :- stateOfUS(X), process_of_law(Processed), Processed = true.
+deprive(X, citizen(A,B), property) :- stateOfUS(X), process_of_law(Processed), Processed = true.
+deprive(X, citizen(A,B), equal_protection_of_law) :- stateOfUS(X), process_of_law(Processed), Processed = true.
 
 % ----------------------------------------------
 
@@ -409,30 +421,31 @@ deprive(X, citizen(_,_), equal_protection_of_law) :- stateOfUS(X), process_of_la
 % amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
 % amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
 % sum/3 calculates the sum elements of the list in first argument using accumulator in second argument and saves result in last argument
-% right/3 states that the right in first argument holds for second argument, with the third argument telling whether the right is denied or not (true if denied)
+% right/2 states that the right in first argument holds for second argument
 % male/1 holds if the person (name in argument) is a male
+% denied/2 holds if the right in first argument is denied on account of second argument
+% notdenied/2 holds if the right in first argument can't be denied on account of second argument
+
 
 amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
 amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
 
-% CountOfRepresentatives := -(No_of_FreePersons, No_of_Indians_not_taxed).
 sum([H|T], A, S) :- A = A1 + H, sum(T, A1, S).
 sum([], A, A).
 
 sum([No_of_FreePersons, No_of_Indians_not_taxed], 0, CountOfRepresentatives).
 
-right(A,B,C).
+right(A,B).
 
-% Changes due to Amendment 26 Section 2
-right(vote_elect(X), Y, false) :- citizen(Y,_), age(Y, Age), Age >= 18.
+% Changes due to Amendment 26 Section 1
+notdenied(right(vote_elect(X), Y), on_account_of_age) :- citizen(Y,_), age(Y, Age), Age >= 18.
 
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(elector_for_Vice_President), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(elector_for_President), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(representative_in_congress), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(executive_officers), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(judicial_officers), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(members_of_legislature), X, Y), Y = true.
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(members_of_legislature), X, Y), Y = true.
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(elector_for_Vice_President), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(elector_for_President), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(representative_in_congress), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(executive_officers), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(judicial_officers), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(members_of_legislature), X), Y).
 sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
 
 % ----------------------------------------------
@@ -445,6 +458,50 @@ sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0,
 
 amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
 amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
+
+% ----------------------------------------------
+
+% AMENDMENT 19
+
+% Functors used
+% amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
+% amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
+% notdenied/2 holds if the right in first argument can't be denied on account of second argument
+
+amendmentpassed(19, 04, 06, 1919).
+amendmentapproved(19, 18, 08, 1920).
+
+notdenied(right(X, vote_elect(Y)), on_account_of_sex) :- 
+power(congress,enforce(amendment19)).
+
+% ----------------------------------------------
+
+%AMENDMENT 26 Section 1
+
+% Functors used
+% amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
+% amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
+% notdenied/2 holds if the right in first argument can't be denied on account of second argument
+
+amendmentpassed(26, 23, 03, 1971).
+amendmentapproved(26, 01, 07, 1971).
+notdenied(right(X, vote_elect(Y)), on_account_of_age) :- age(CitizenX,Age), Age>=18.
+
+% ----------------------------------------------
+
+%AMENDMENT 26 Section 2
+
+% Functors used
+% amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
+% amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
+% notdenied/2 holds if the right in first argument can't be denied on account of second argument
+
+amendmentpassed(26, 23, 03, 1971).
+amendmentapproved(26, 01, 07, 1971).
+
+power(congress,enforce(amendment26)).
+
+% ----------------------------------------------
 
 
 
