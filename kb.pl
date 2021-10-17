@@ -306,6 +306,37 @@ enter_compact(X,Y) :- stateOfUS(X), consentOfCongress(Consent), Consent = true, 
 war(X, Y) :- stateOfUS(X), consentOfCongress(Congress), Consent = true, invaded(X,Y,Z), Z = true.
 
 % ----------------------------------------------
+%Article 4
+Section 1
+faithandcredit(X,publicact(Z),Y):- stateOfUS(X),stateOfUS(Y).
+faithandcredit(X,records(Z),Y):- stateOfUS(X),stateOfUS(Y).
+faithandcredit(X,judicialproceeding(Z),Y):- stateOfUS(X),stateOfUS(Y).
+congressmannertoprove(acts).
+congressmannertoprove(records).
+congressmannertoprove(proceedings).
+
+Section 2
+privileges(X) :-citizen(X,_).
+immunities(X) :-citizen(X,_).
+crime(X,Y) :- deliver(X,Y)
+deliver(X,Y) :- found(X,Z), demand(executiveauthority(Y))
+
+Section 3
+power(congress,admit(newstatesintounion)).
+statesformation(X):-withinjurisdiction(X)
+statesformation(X):-nojunctionofstates(X). 
+withinjurisdiction(X) :-newstateconsentfromotherstateslegislatures(X).
+nojunctionofstates(X) :-newstateconsentfromotherstateslegislatures(X).
+power(congress,disposeofRulesandRegulationsrespectingtheTerritoryorotherPropertybelongingtotheUnitedStates).
+power(congress,makeallneedfulRulesandRegulationsrespectingtheTerritoryorotherPropertybelongingtotheUnitedStates).
+
+Section 4
+guaranteerepublicformofgovernment(X) :- stateOfUS(X).
+protectionAgainstInvasion(X) :-stateOfUS(X).
+protectionAgainstDomesticViolence(X) :- applicationforprotectionAgainstDomesticViolence(legislature,Y,1), stateOfUS(Y). 
+protectionAgainstDomesticViolence(X) :- applicationforprotectionAgainstDomesticViolence(executive,Y), stateOfUS(Y), applicationforprotectionAgainstDomesticViolence(legislature,Y,0).
+
+%--------------------------------------------
 
 % ARTICLE 5
 
