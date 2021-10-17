@@ -122,6 +122,25 @@ choose(houseOfRepresentatives, officers).
 
 %ARTICLE 1 Section 7
 
+power(houseofRepresentatives, raise(revenue_bills)).
+power(senate, propose(amendments_bills)).
+power(senate, concor(amendments_bills)).
+bill_to_law(X) :- bill_passed(houseOfRepresentatives,X), bill_passed(senate,X), bill_passed(president,X).
+bill_passed(president,X) :- bill_approve(president,X,Y), Y<=10. 
+bill_passed(president,X) :- bill_approve(president,X,Y), Y>10.
+bill_passed(president,X) :- bill_disapprove(president,X), bill_reconsider(houseOfRepresentatives,X,Y), bill_reconsider(senate,X,Y), Y>=0.66.
+order(X) :- order_passed(houseOfRepresentatives,X), order_passed(senate,X), order_passed(president,X).
+order_passed(president,X) :- order_approve(president,X,Y), Y<=10.
+order_passed(president,X) :- order_approve(president,X,Y), Y>10.
+order_passed(president,X) :- order_disapprove(president,X), order_reconsider(houseOfRepresentatives,X,Y), order_reconsider(senate,X,Y), Y>=0.66.
+resolution(X) :- resolution_passed(houseOfRepresentatives,X), resolution_passed(senate,X), resolution_passed(president,X).
+resolution_passed(president,X) :- resolution_approve(president,X,Y), Y<=10.
+resolution_passed(president,X) :- resolution_approve(president,X,Y), Y>10.
+resolution_passed(president,X) :- resolution_disapprove(president,X), resolution_reconsider(houseOfRepresentatives,X,Y), resolution_reconsider(senate,X,Y), Y>=0.66.
+vote(X) :- vote_passed(houseOfRepresentatives,X), vote_passed(senate,X), vote_passed(president,X).
+vote_passed(president,X) :- vote_approve(president,X,Y), Y<=10.
+vote_passed(president,X) :- vote_approve(president,X,Y), Y>10.
+vote_passed(president,X) :- vote_disapprove(president,X), vote_reconsider(houseOfRepresentatives,X,Y), vote_reconsider(senate,X,Y), Y>=0.66.
 
 
 
