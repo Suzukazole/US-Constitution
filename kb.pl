@@ -129,18 +129,18 @@ power(houseofRepresentatives, raise(revenue_bills)).
 power(senate, propose(amendments_bills)).
 power(senate, concor(amendments_bills)).
 bill_to_law(X) :- bill_passed(houseOfRepresentatives,X), bill_passed(senate,X), bill_passed(president,X).
-bill_passed(president,X) :- bill_approve(president,X,Y), Y<=10. 
+bill_passed(president,X) :- bill_approve(president,X,Y), =<(Y,10). 
 bill_passed(president,X) :- bill_disapprove(president,X), bill_reconsider(houseOfRepresentatives,X,Y), bill_reconsider(senate,X,Y), Y>=0.66.
 order(X) :- order_passed(houseOfRepresentatives,X), order_passed(senate,X), order_passed(president,X).
-order_passed(president,X) :- order_approve(president,X,Y), Y<=10.
+order_passed(president,X) :- order_approve(president,X,Y), Y=<10.
 order_passed(president,X) :- order_approve(president,X,Y), Y>10.
 order_passed(president,X) :- order_disapprove(president,X), order_reconsider(houseOfRepresentatives,X,Y), order_reconsider(senate,X,Y), Y>=0.66.
 resolution(X) :- resolution_passed(houseOfRepresentatives,X), resolution_passed(senate,X), resolution_passed(president,X).
-resolution_passed(president,X) :- resolution_approve(president,X,Y), Y<=10.
+resolution_passed(president,X) :- resolution_approve(president,X,Y), Y=<10.
 resolution_passed(president,X) :- resolution_approve(president,X,Y), Y>10.
 resolution_passed(president,X) :- resolution_disapprove(president,X), resolution_reconsider(houseOfRepresentatives,X,Y), resolution_reconsider(senate,X,Y), Y>=0.66.
 vote(X) :- vote_passed(houseOfRepresentatives,X), vote_passed(senate,X), vote_passed(president,X).
-vote_passed(president,X) :- vote_approve(president,X,Y), Y<=10.
+vote_passed(president,X) :- vote_approve(president,X,Y), Y=<10.
 vote_passed(president,X) :- vote_approve(president,X,Y), Y>10.
 vote_passed(president,X) :- vote_disapprove(president,X), vote_reconsider(houseOfRepresentatives,X,Y), vote_reconsider(senate,X,Y), Y>=0.66.
 
@@ -312,7 +312,7 @@ amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 186
 
 citizen(X, Y) :- natural_born(X), age(X, Y).
 notenforce(X, Law) :- stateOfUS(X), abridges_privelegies(citizen(_,_), Abridges), abridges_immunities(citizen(_,_), Abridges), Abridges = true.
-notmakelaw(X, Law)) :- stateOfUS(X), abridges_privelegies(citizen(_,_), Abridges), abridges_immunities(citizen(_,_), Abridges), Abridges = true.
+notmakelaw(X, Law) :- stateOfUS(X), abridges_privelegies(citizen(_,_), Abridges), abridges_immunities(citizen(_,_), Abridges), Abridges = true.
 deprive(X, citizen(_,_), life) :- stateOfUS(X), process_of_law(Processed), Processed = true.
 deprive(X, citizen(_,_), liberty) :- stateOfUS(X), process_of_law(Processed), Processed = true.
 deprive(X, citizen(_,_), property) :- stateOfUS(X), process_of_law(Processed), Processed = true.
@@ -324,6 +324,23 @@ deprive(X, citizen(_,_), equal_protection_of_law) :- stateOfUS(X), process_of_la
 
 amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
 amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
+
+CountOfRepresentatives := -(No_of_FreePersons, No_of_Indians_not_taxed).
+right(A,B,C).
+
+% Changes due to Amendment 26
+right(vote_elect(X), Y, false) :- citizen(Y,_), age(Y, Age), Age >= 18.
+
+ReducedCountOfRepresentatives := -(CountOfRepresntatives, /(A, Males_above_18)) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(elector_for_Vice_President), X, Y), Y = true.
+ReducedCountOfRepresentatives := -(CountOfRepresntatives, /(A, Males_above_18)) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(elector_for_President), X, Y), Y = true.
+ReducedCountOfRepresentatives := -(CountOfRepresntatives, /(A, Males_above_18)) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(representative_in_congress), X, Y), Y = true.
+ReducedCountOfRepresentatives := -(CountOfRepresntatives, /(A, Males_above_18)) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(executive_officers), X, Y), Y = true.
+ReducedCountOfRepresentatives := -(CountOfRepresntatives, /(A, Males_above_18)) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(judicial_officers), X, Y), Y = true.
+ReducedCountOfRepresentatives := -(CountOfRepresntatives, /(A, Males_above_18)) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(members_of_legislature), X, Y), Y = true.
+ReducedCountOfRepresentatives := -(CountOfRepresntatives, /(A, Males_above_18)) :- length(Males_above_18_denied_vote, A), male(X), right(vote_elect(members_of_legislature), X, Y), Y = true.
+ReducedCountOfRepresentatives := -(CountOfRepresntatives, /(A, Males_above_18)) :- length(Males_above_18_denied_vote, A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
+
+
 
 
 
