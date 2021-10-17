@@ -92,8 +92,6 @@ eligible_for_vicePresident(Person):- eligible_for_president(Person).
 
 % Ammendment 20 section 3
 
-
-
 citizenEligible(Person):- citizen(Person, Y), Y>=14.
 ageEligible(Person):- age(Person, Y), Y>= 35.
 
@@ -108,4 +106,24 @@ compensation(president).
 oathPresident("I do solemnly swear (or affirm) that I will faithfully execute the Office of President of the United States, and will to the best of my Ability, preserve, protect and defend the Constitution of the United States").
 
 
-    
+% Section 2 
+
+senatorsConsent("to make Treaties", true). 
+commanderinchief(president, "Army", "Navy", "Militia").
+power(president, "Grant Reprieves").
+power(president, "Pardons for Offenses").
+power(president, "to make Treaties"):- senatorsConsent("to make Treaties", Consent), Consent=true.
+power(president, "appoint Ambassadors").
+power(president, "appoint public Ministers").
+power(president, "appoint consuls").
+power(president, "appoint Judges").
+power(president, "appoint other offices of the United States").
+power(president, "fill vacancies during recess").
+
+% Section 3
+informationofState(president, congress).
+power(president, "convene both Houses").
+
+%section 4
+
+removedFromOffice(member(X, [president, vice_president, "all civil Officers"]), Reason):- member(Reason, ["Treason", "Bribery", "high crimes"]). 
