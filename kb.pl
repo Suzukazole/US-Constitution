@@ -504,6 +504,29 @@ supportConstitution(X) :- (not(rebel(X, against_constitution)); not(aid(X,enemie
 
 % ----------------------------------------------
 
+% AMENDMENT 14 Section 4
+
+% Functors used
+% amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
+% amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
+% donotquestion/1 says that the state or US can't question the value in the argument
+% validity/1 returns validity of the argument
+% debt/1 says the debt was for the reason in the argument
+% illegal/1 says that the payment in the argument is illegal
+
+amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
+amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
+
+donotquestion(validity(debt(us))).
+donotquestion(validity(debt(pension_payments))).
+donotquestion(validity(debt(bounties_for_services))).
+donotpay(X, debt(aid(Y,rebls_against_US))) :- X = us; X = stateOfUS(A).
+donotpay(X, claim_for_loss_of_slave) :- X = us; X = stateOfUS(A).
+donotpay(X, claim_for_emancipation_of_slave) :- X = us; X = stateOfUS(A).
+illegal(P) :- donotpay(X, P).
+
+% ----------------------------------------------
+
 % AMENDMENT 14 Section 5
 
 % Functors used
