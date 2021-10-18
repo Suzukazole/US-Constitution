@@ -28,6 +28,8 @@ ID:
 :- discontiguous amendmentapproved/4.
 :- discontiguous sum/3.
 :- discontiguous right/2.
+:- discontiguous notdenied/2.
+:- discontiguous qualified/2.
 
 age(rohan, 23).
 citizen(rohan, 23).
@@ -345,15 +347,15 @@ congressmannertoprove(proceedings).
 
 privileges(X) :-citizen(X,_).
 immunities(X) :-citizen(X,_).
-crime(X,Y) :- deliver(X,Y)
-deliver(X,Y) :- found(X,Z), demand(executiveauthority(Y))
+crime(X,Y) :- deliver(X,Y).
+deliver(X,Y) :- found(X,Z), demand(executiveauthority(Y)).
 
 % ----------------------------------------------
 
 % ARTICLE 4 Section 3
 
 power(congress,admit(newstatesintounion)).
-statesformation(X):-withinjurisdiction(X)
+statesformation(X):-withinjurisdiction(X).
 statesformation(X):-nojunctionofstates(X). 
 withinjurisdiction(X) :-newstateconsentfromotherstateslegislatures(X).
 nojunctionofstates(X) :-newstateconsentfromotherstateslegislatures(X).
@@ -455,9 +457,94 @@ sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0,
 % Functors used
 % amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
 % amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
+% qualified/2 has the names of those in first argument who are qualified for an election/appointment for the position in second argument
+% rebel/2 says the first argument was part of a rebellion against second argument
+% aid/1 says the first argument aided the second
 
 amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
 amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
+
+qualified([], X) :- X = senate; X = representative_in_congress;
+                    X = elector_for_President; X = elector_for_Vice_President;
+                    X = civil_office; X = military_office.
+qualified([H|T],senate) :- (not(qualified([H|T1], member_congress));
+                      not(qualified([H|T2], office_of_US));
+                      not(qualified([H|T3], member_congress));
+                      not(qualified([H|T4], member_of_state_legislature))), qualified(T, senate).
+
+qualified([H|T],representative_in_congress) :- (not(qualified([H|T1], member_congress));
+                    not(qualified([H|T2], office_of_US));
+                    not(qualified([H|T3], member_congress));
+                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, representative_in_congress).
+
+qualified([H|T],elector_for_President) :- (not(qualified([H|T1], member_congress));
+                    not(qualified([H|T2], office_of_US));
+                    not(qualified([H|T3], member_congress));
+                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, elector_for_President).
+
+qualified([H|T],elector_for_Vice_President) :- (not(qualified([H|T1], member_congress));
+                    not(qualified([H|T2], office_of_US));
+                    not(qualified([H|T3], member_congress));
+                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, elector_for_Vice_President).
+
+qualified([H|T],civil_office) :- (not(qualified([H|T1], member_congress));
+                    not(qualified([H|T2], office_of_US));
+                    not(qualified([H|T3], member_congress));
+                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, civil_office).
+
+qualified([H|T],military_office) :- (not(qualified([H|T1], member_congress));
+                    not(qualified([H|T2], office_of_US));
+                    not(qualified([H|T3], member_congress));
+                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, military_office).
+
+supportConstitution(X) :- (not(rebel(X, against_constitution)); not(aid(X,enemies))), qualified([X|T], Y),
+                           (Y = senate; Y = representative_in_congress;
+                           Y = elector_for_President; Y = elector_for_Vice_President;
+                           Y = civil_office; Y = military_office).
+
+% ----------------------------------------------
+
+% AMENDMENT 14 Section 5
+
+% Functors used
+% amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
+% amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
+% power/2 says the government body in the first argument has the power mentioned in the second argument
+
+amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
+amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
+
+power(congress, enforce(amendment14)).
+
+% ----------------------------------------------
+
+% AMENDMENT 15 Section 1
+
+% Functors used
+% amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
+% amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
+% notdenied/2 holds if the right in first argument can't be denied on account of second argument
+
+amendmentpassed(15, 26, 02, 1869). % Amendment 15 was passed on 26th February 1869
+amendmentapproved(15, 03, 02, 1870). % Amendment 15 was approved on 03rd February 1870
+
+notdenied(right(X, vote_elect(Y)), on_account_of_race).
+notdenied(right(X, vote_elect(Y)), on_account_of_color).
+notdenied(right(X, vote_elect(Y)), on_account_of_previous_servitude).
+
+% ----------------------------------------------
+
+% AMENDMENT 15 Section 2
+
+% Functors used
+% amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
+% amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
+% power/2 says the government body in the first argument has the power mentioned in the second argument
+
+amendmentpassed(15, 26, 02, 1869). % Amendment 15 was passed on 26th February 1869
+amendmentapproved(15, 03, 02, 1870). % Amendment 15 was approved on 03rd February 1870
+
+power(congress, enforce(amendment15)).
 
 % ----------------------------------------------
 
@@ -467,11 +554,12 @@ amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 186
 % amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
 % amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
 % notdenied/2 holds if the right in first argument can't be denied on account of second argument
+% power/2 says the government body in the first argument has the power mentioned in the second argument
 
-amendmentpassed(19, 04, 06, 1919).
-amendmentapproved(19, 18, 08, 1920).
+amendmentpassed(19, 04, 06, 1919). % Amendment 19 was passed on 4th June 1919
+amendmentapproved(19, 18, 08, 1920). % Amendment 19 was approved on 18th August 1920
 
-notdenied(right(X, vote_elect(Y)), on_account_of_sex) :- 
+notdenied(right(X, vote_elect(Y)), on_account_of_sex). 
 power(congress,enforce(amendment19)).
 
 % ----------------------------------------------
@@ -483,8 +571,8 @@ power(congress,enforce(amendment19)).
 % amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
 % notdenied/2 holds if the right in first argument can't be denied on account of second argument
 
-amendmentpassed(26, 23, 03, 1971).
-amendmentapproved(26, 01, 07, 1971).
+amendmentpassed(26, 23, 03, 1971). % Amendment 26 was passed on 23rd March 1971
+amendmentapproved(26, 01, 07, 1971). % Amendment 26 was approved on 1st July 1971
 notdenied(right(X, vote_elect(Y)), on_account_of_age) :- age(CitizenX,Age), Age>=18.
 
 % ----------------------------------------------
@@ -494,10 +582,10 @@ notdenied(right(X, vote_elect(Y)), on_account_of_age) :- age(CitizenX,Age), Age>
 % Functors used
 % amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
 % amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
-% notdenied/2 holds if the right in first argument can't be denied on account of second argument
+% power/2 says the government body in the first argument has the power mentioned in the second argument
 
-amendmentpassed(26, 23, 03, 1971).
-amendmentapproved(26, 01, 07, 1971).
+amendmentpassed(26, 23, 03, 1971). % Amendment 26 was passed on 23rd March 1971
+amendmentapproved(26, 01, 07, 1971). % Amendment 26 was approved on 1st July 1971
 
 power(congress,enforce(amendment26)).
 
