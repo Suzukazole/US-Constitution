@@ -34,7 +34,10 @@ ID: 2019B5A70650P
 :- discontiguous tempArrang/2.
 :- discontiguous vacancies/3.
 :- discontiguous fillVacancies/1.
-:- discontiguous assemblyOfCongress/1.
+:- discontiguous assemblyOfCongress/3.
+:- discontiguous members/1.
+:- discontiguous successfulImpeachement/1.
+:- discontiguous crime/2.
 
 age(rohan, 23).
 citizen(rohan, 23).
