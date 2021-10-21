@@ -149,6 +149,7 @@ boundBy(legislature, oath(constitution)).
 boundBy(judges, oath(constitution)).
 
 %Amendment 11 
+noJudicialPower(federal, state).
 
 
 %Amendment 21
