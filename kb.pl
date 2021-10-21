@@ -625,6 +625,61 @@ nodenyvote(State) :- stateOfUS(State), consent(State, Consent), Consent = false.
 
 % ----------------------------------------------
 
+% ARTICLE 7
+
+witnesstoindependenceofUS(stateOfUS(newHampshire),johnLangdon).
+witnesstoindependenceofUS(stateOfUS(newHampshire),nicholasGilman).
+witnesstoindependenceofUS(stateOfUS(massachusetts),nathanielGorham).
+witnesstoindependenceofUS(stateOfUS(massachusetts),rufusKing).
+witnesstoindependenceofUS(stateOfUS(connecticut),wmsamlJohnson).
+witnesstoindependenceofUS(stateOfUS(connecticut),rogerSherman).
+witnesstoindependenceofUS(stateOfUS(newYork),alexanderHamilton).
+witnesstoindependenceofUS(stateOfUS(),wilLivingston).
+witnesstoindependenceofUS(stateOfUS(newJersey),wilLivingston).
+witnesstoindependenceofUS(stateOfUS(newJersey),wilLivingston).
+witnesstoindependenceofUS(stateOfUS(newJersey),wilLivingston).
+witnesstoindependenceofUS(stateOfUS(newJersey),wilLivingston).
+witnesstoindependenceofUS(stateOfUS(pennsylvania),bFranklinn).
+witnesstoindependenceofUS(stateOfUS(pennsylvania),thomasMifflin).
+witnesstoindependenceofUS(stateOfUS(pennsylvania),robtMorris).
+witnesstoindependenceofUS(stateOfUS(pennsylvania),geoClymer).
+witnesstoindependenceofUS(stateOfUS(pennsylvania),thosFitzSimons).
+witnesstoindependenceofUS(stateOfUS(pennsylvania),jaredIngersoll).
+witnesstoindependenceofUS(stateOfUS(pennsylvania),jamesWilson).
+witnesstoindependenceofUS(stateOfUS(pennsylvania),gouvMorris).
+witnesstoindependenceofUS(stateOfUS(delaware),geoRead).
+witnesstoindependenceofUS(stateOfUS(delaware),gunningBedfordjun).
+witnesstoindependenceofUS(stateOfUS(delaware),johnDickinson).
+witnesstoindependenceofUS(stateOfUS(delaware),richardBassett).
+witnesstoindependenceofUS(stateOfUS(delaware),jacoBroom).
+witnesstoindependenceofUS(stateOfUS(maryland),jamesMcHenry).
+witnesstoindependenceofUS(stateOfUS(maryland),danofSt.Thos.Jenifer).
+witnesstoindependenceofUS(stateOfUS(maryland),danlCarroll ).
+witnesstoindependenceofUS(stateOfUS(virginia),johnBlair).
+witnesstoindependenceofUS(stateOfUS(virginia),jamesMadisonJr).
+witnesstoindependenceofUS(stateOfUS(northCarolina),wmBlount.
+witnesstoindependenceofUS(stateOfUS(northCarolina),richdDobbsSpaight).
+witnesstoindependenceofUS(stateOfUS(northCarolina),huWilliamson).
+witnesstoindependenceofUS(stateOfUS(southCarolina),rutledge).
+witnesstoindependenceofUS(stateOfUS(southCarolina),charlesCotesworthPinckney).
+witnesstoindependenceofUS(stateOfUS(southCarolina),charlesPinckney).
+witnesstoindependenceofUS(stateOfUS(southCarolina),pierceButler).
+witnesstoindependenceofUS(stateOfUS(georgia),williamFew).
+witnesstoindependenceofUS(stateOfUS(georgia),abrBaldwin).
+constitutionpassed(monday(17,9,1787)).
+presentduringconvention(stateOfUS(newHampshire)).
+presentduringconvention(stateOfUS(massachusetts)).
+presentduringconvention(stateOfUS(connecticut)).
+presentduringconvention(Mr.HamiltonfromstateOfUS(newYork)).
+presentduringconvention(stateOfUS(newJersey)).
+presentduringconvention(stateOfUS(pennsylvania)). 
+presentduringconvention(stateOfUS(delaware)).
+presentduringconvention(stateOfUS(maryland)).
+presentduringconvention(stateOfUS(northCarolina)).
+presentduringconvention(stateOfUS(southCarolina)).
+presentduringconvention(stateOfUS(georgia)).
+
+
 % Preamble to the Bill of Rights
 
 % assemblyOfCongress/3 conditions required for assembly Of Congress
@@ -776,6 +831,17 @@ reservedTo(people).
 powerNotDelegatedtoUS(byConstitution, reservedTo(X)).
 
 % ----------------------------------------------
+
+% AMENDMENT 13 Section 1
+amendmentpassed(13,31,1,1865).
+amendementapproved(13,6,12,1865).
+
+punishment(X,slavery) :- crime(X,convicted).
+punishment(X,nvoluntary_servitude) :- crime(X,convicted).
+
+% AMENDMENT 13 Section 2
+enforce(article_by_appropriate_legislation).
+power(congress,enforce(article_by_appropriate_legislation)).
 
 % AMENDMENT 14 Section 1
 
@@ -955,6 +1021,13 @@ power(congress, enforce(amendment15)).
 
 % ----------------------------------------------
 
+% AMENDMENT 16 Section 1
+amendmentpassed(13,2,7,1909).
+amendementapproved(13,3,2,1913).
+
+power(congress,lay(taxes_on_income)).
+power(congress,collect(taxes_on_income)).
+
 % AMENDMENT 19
 
 % Functors used
@@ -1011,6 +1084,25 @@ amendmentenforced(20,2,15,10,1933).
 amendmentOperative(20, toConstitution, passed(legislatureOf(stateOfUS(X), A), Y)) :- A>=0.75, Y<7.
 
 % ----------------------------------------------
+
+% AMENDMENT 22 Section 1
+% notElected/2 Y is a the president in power and X is the president who has been elected.
+amendmentpassed(22,21,3,1947).
+amendementapproved(22,27,2,1951).
+notElected(president,more_than_twice);
+notheldoffice(Y,president,Z):- president(X),Z>2.
+notheldoffice(Y,acting_president,Z):- president(X),Z>2.
+
+% AMENDMENT 22 Section 2
+operative(amendment_22) :- ratifiedYears(X,Y),X<7,Y>0.75.
+
+% AMENDMENT 23 Section 1
+amendmentpassed(23,16,6,1960).
+amendementapproved(23,29,3,1961).
+power(congress,appoint(districtconstitutingseatofgovernment)).
+
+% AMENDMENT 23 Section 2
+power(congress,enforce(amendement_23)).
 
 % AMENDMENT 24 Section 1
 
