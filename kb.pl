@@ -65,7 +65,7 @@ monday(2, 12, 2019).
 % composed/3 holds if the bodies in the second and third arguments are contained in the first
 % populationOfUS/1 states the population of US
 
-populationOfUS(333527197). %Fact to use further
+populationOfUS(1000000000). %Fact to use further
 consist(congress,senate).
 consist(congress,houseOfRepresentatives).
 legislativePower(congress).
