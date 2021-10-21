@@ -276,6 +276,8 @@ articles(proposedBy(congress), ratifiedBy(legislatureOf(stateOfUS(X)))).
 % powerless/2 cases where an individual or an institution does not have any influence
 % right/2 rights available to citizens of the US 
 
+amendmentapproved(1, 15, 12, 1791).
+
 powerless(congress, establishmentOfReligion).
 powerless(congress, prohibitionOf(freeExcersiseOfReligion)).
 right(people, freedomOfSpeech).
@@ -285,9 +287,13 @@ right(people, petitionFor(redressOfGrievances)).
 
 % Amendment 2
 
+amendmentapproved(2, 15, 12, 1791).
+
 right(people, keepAndBearArms).
 
 % Amendment 3
+
+amendmentapproved(3, 15, 12, 1791).
 
 right(soldier, timeOfPeace(cannot(quartaredInHouse))).
 right(soldier, timeOfPeace(permissionOfOwner(quartaredInHouse))).
@@ -298,6 +304,8 @@ right(soldier, timeOfWar(permissionOfOwner(quartaredInHouse))).
 
 % secure/1 cases when an individual or an institution has immunity
 % supportedBy/1 supported By these laws
+
+amendmentapproved(4, 15, 12, 1791).
 
 secure(inTheirPersons).
 secure(inTheirHouses).
@@ -313,7 +321,7 @@ havePower(government, warrants, supportedBy(X)).
 
 % required/2 conditions required to conduct a trial against serious Criminal Charges
 
-
+amendmentapproved(5, 15, 12, 1791).
 required(grandJury, seriousCriminalCharges).
 inService(war).
 inService(publicDanger).
@@ -327,6 +335,7 @@ right(people, property).
 
 % Amendment 6
 
+amendmentapproved(6, 15, 12, 1791).
 right(accused, speedyAndPublicTrial).
 right(accused, trialByAnImpartialJury, in(stateOfUS(district(X)))).
 right(accused, informationAboutNatureAndCauseOfAccusation).
@@ -336,6 +345,7 @@ right(accused, assistanceOfDefenceCounsel).
 
 % Amendment 7
 
+amendmentapproved(7, 15, 12, 1791).
 controversy(X).
 right(people, trialByJury, controversy(X)) :- X > 20.
 
@@ -343,6 +353,7 @@ right(people, trialByJury, controversy(X)) :- X > 20.
 
 % notRequired/1 cases where certain actions are not required 
 
+amendmentapproved(8, 15, 12, 1791).
 notRequired(excessiveBail).
 notRequired(excessiveFines).
 notRequired(cruelPunishments).
@@ -351,11 +362,13 @@ right(people, notRequired(X)).
 
 % Amendment 9
 
+amendmentapproved(9, 15, 12, 1791).
 right(people, deny, retainedBy(otherPeople)).
 right(people, disparage, retainedBy(otherPeople)).
 
 % Amendment 10
 
+amendmentapproved(10, 15, 12, 1791).
 reservedTo(stateOfUS(X)).
 reservedTo(people).
 powerNotDelegatedtoUS(byConstitution, reservedTo(X)).
@@ -363,6 +376,9 @@ powerNotDelegatedtoUS(byConstitution, reservedTo(X)).
 % Amendment 20 Section 1
 
 % endOfTerm/2 specifies the date and time of the end of term of the elected representatives
+
+amendmentpassed(20,2,3,1932).
+amendmentapproved(20, 23,1,1933).
 
 endOfTerm(president, day(D,M,T)) :- D =:= 20, M =:= january, T =:= 1200.
 endOfTerm(vPOTUS, day(D,M,T)) :- D =:= 20, M =:= january, T =:= 1200.
@@ -389,12 +405,11 @@ amendmentOperative(20, toConstitution, passed(legislatureOf(stateOfUS(X), A), Y)
 
 % Amendment 24 Section 1
 
-amendmentpassed(20,27,8,1962).
-amendmentapproved(20, 23,1,1964).
+amendmentpassed(24,27,8,1962).
+amendmentapproved(24, 23,1,1964).
 
 right(citizen, vote(election)).
 
 % Amendment 24 Section 2
 
 power(congress, enforce(amendment(24))).
-
