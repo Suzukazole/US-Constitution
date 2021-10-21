@@ -15,7 +15,6 @@ ID: 2019B5A70650P
 % ----------- Facts copied for implementation of test cases---------------
 
 % Informs system that arguments of this predicate mught not be together
-
 :- discontiguous age/2.
 :- discontiguous citizen/2.
 :- discontiguous consist/2.
@@ -62,7 +61,9 @@ monday(2, 12, 2019).
 % legislativePower/1 defines which body has legislative power
 % consist/2 has the body in second argument that is contained in first argument
 % composed/3 holds if the bodies in the second and third arguments are contained in the first
+% populationOfUS/1 states the population of US
 
+populationOfUS(333527197). %Fact to use further
 consist(congress,senate).
 consist(congress,houseOfRepresentatives).
 legislativePower(congress).
@@ -123,12 +124,16 @@ sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0,
 sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(members_of_legislature), X), Y).
 sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
 
-stateOfUS(rhodeisland).
-meetingOfCongress(D, M, Year).
-enum_done(X) :- meetingOfCongress(D, M, Year), X >= Year, =<(X, Year+3), enum_done(Y), =<(X-Y, 10).
+stateOfUS(rhodeisland). %Fact added to be used further
+meetingOfCongress(04, 07, 1861). %Fact added to test enum_done/1 and other fns
+meetingOfCongress(02, 12, 1861). %Fact added to test enum_done/1 and other fns
+meetingOfCongress(07, 12, 1863). %Fact added to test enum_done/1 and other fns
+meetingOfCongress(05, 12, 1864). %Fact added to test enum_done/1 and other fns
+% enum_done(1862).
+enum_done(X) :- meetingOfCongress(D, M, Year), X >= Year, =<(X, Year+3); (enum_done(Y), =<(X-Y, 10)).
 total([H|T], A, N) :- total(T, A-1, N).
 total([],A,A). 
-num_representatives(Y) :- Y = [H|T], H>=1, total(Y, 0, N), =<(N,*(/(1,30000)) , populationOfUS).
+num_representatives(Y) :- Y = [H|T], H>=1, total(Y, 0, N), =<(N,*(/(1,30000)) , populationOfUS(X)).
 until_enum_representatives(stateOfUS(newHampshire), 3).
 until_enum_representatives(stateOfUS(massachusetts), 8).
 until_enum_representatives(stateOfUS(rhodeisland), 1).
