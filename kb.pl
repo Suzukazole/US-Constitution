@@ -29,6 +29,15 @@ ID: 2019B5A70650P
 :- discontiguous right/2.
 :- discontiguous notdenied/2.
 :- discontiguous qualified/2.
+:- discontiguous senator/2.
+:- discontiguous senators/1.
+:- discontiguous judicialPower/2.
+:- discontiguous powerless/2.
+:- discontiguous jury/2.
+:- discontiguous tempArrang/2.
+:- discontiguous vacancies/3.
+:- discontiguous fillVacancies/1.
+:- discontiguous assemblyOfCongress/1.
 
 age(rohan, 23).
 citizen(rohan, 23).
@@ -163,7 +172,7 @@ choose(houseOfRepresentatives, officers).
 % noOfVotesPerSenator/1 specifies the number of votes a senator can cast 
 % noOfSenatorsPerState/1 specifies the number of senators per state
 % durationOfSenator/1 specifies the duration of years a person will serve as a senator
-% senator/1 refers to senators
+% senator/2 refers to senator name in first argument and second argument says who chose the senator
 % choosenBy/1 implies selected by the variable passed
 % senate/4 checks validity of the whole senate
 % electors/1 checks requisite qualifications
@@ -188,11 +197,11 @@ choose(houseOfRepresentatives, officers).
 noOfVotesPerSenator(1).
 noOfSenatorsPerState(2).
 durationOfSenator(6).
-senators(obama, choosenBy(legislature)).% Fact added to test senator/2
-senators(kamala, choosenBy(legislature)).% Fact added to test senator/2
+senator(obama, choosenBy(legislature)).% Fact added to test senator/2
+senator(kamala, choosenBy(legislature)).% Fact added to test senator/2
 
 senate(X, Y, Z, W) :-
-    senators(X,choosenBy(legislature)),
+    senator(X,choosenBy(legislature)),
     noOfSenatorsPerState(Y),
     noOfVotesPerSenator(Z),
     durationOfSenator(W).
@@ -224,7 +233,7 @@ votingVPOTUS(equalHouse).
 otherOfficers(absenceOf(vPOTUS); officeOFTPOTUS(vPOTUS)).
 presidentProTempore(absenceOf(vPOTUS)).
 
-powerOfImpeachement(senate, (oath; affirmation), present(twothirdOfMembers).).
+powerOfImpeachement(senate, (oath; affirmation), present(twothirdOfMembers)).
 trialOfPOTUS(present(twothirdOfMembers), present(chiefJustice)).
 
 successfulImpeachement(senator(X)) :-
@@ -285,10 +294,10 @@ expelMember(house, disorderlyBehaviour, twothirdOfMembers).
 journalOfProceedings(house).
 publishJOP(house, notPublish(requireSecrecy), answersToQuestions(onefifthOfPresent)).
 
-adjournHouse(congress, consentOfOtherHouse, Place) :- Place =!= twoHousesSitting.
+adjournHouse(congress, consentOfOtherHouse, Place) :- Place =\= twoHousesSitting.
 adjournHouse(congress, Days, Place) :- 
     Days<4,
-    Place =!= twoHousesSitting.
+    Place =\= twoHousesSitting.
 
 %--------------------------------------------------------
 
@@ -311,7 +320,7 @@ priviligedFromArrest(except(treason)).
 priviligedFromArrest(except(felony)).
 priviligedFromArrest(except(breachOfPeace)).
 senators(priviligedFromArrest(X)).
-senators(questioned, house).
+senators(questioned_by_house).
 
 appointmentToCivilOffice(notAllowed(senators, whileElected)).
 appointmentToCivilOffice(notAllowed(representatives, whileElected)).
@@ -540,7 +549,7 @@ judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), stateOfUS(Y)).
 
 % Changes due to Amendment 11
 jury(trialOfCrimes(X), stateOfUS(Y)) :- X =\= impeachement .
-jury(trialOfCrimes(X), foreignState(Y), congress) :- X =\= impeachement .
+jury(trialOfCrimes(X), foreignState(Y)) :- X =\= impeachement .
 
 % ----------------------------------------------
 
@@ -627,6 +636,9 @@ nodenyvote(State) :- stateOfUS(State), consent(State, Consent), Consent = false.
 
 % ARTICLE 7
 
+% Functors used
+% mr_Hamiltonfrom/1 says the state Mr.Hamilton is from
+
 witnesstoindependenceofUS(stateOfUS(newHampshire),johnLangdon).
 witnesstoindependenceofUS(stateOfUS(newHampshire),nicholasGilman).
 witnesstoindependenceofUS(stateOfUS(massachusetts),nathanielGorham).
@@ -655,9 +667,9 @@ witnesstoindependenceofUS(stateOfUS(delaware),jacoBroom).
 witnesstoindependenceofUS(stateOfUS(maryland),jamesMcHenry).
 witnesstoindependenceofUS(stateOfUS(maryland),danofSt.Thos.Jenifer).
 witnesstoindependenceofUS(stateOfUS(maryland),danlCarroll ).
-witnesstoindependenceofUS(stateOfUS(virginia),johnBlair).
+witnesstoindependenceofUS(stateOfUS(virginia),johnBlair).
 witnesstoindependenceofUS(stateOfUS(virginia),jamesMadisonJr).
-witnesstoindependenceofUS(stateOfUS(northCarolina),wmBlount.
+witnesstoindependenceofUS(stateOfUS(northCarolina),wmBlount).
 witnesstoindependenceofUS(stateOfUS(northCarolina),richdDobbsSpaight).
 witnesstoindependenceofUS(stateOfUS(northCarolina),huWilliamson).
 witnesstoindependenceofUS(stateOfUS(southCarolina),rutledge).
@@ -670,7 +682,7 @@ constitutionpassed(monday(17,9,1787)).
 presentduringconvention(stateOfUS(newHampshire)).
 presentduringconvention(stateOfUS(massachusetts)).
 presentduringconvention(stateOfUS(connecticut)).
-presentduringconvention(Mr.HamiltonfromstateOfUS(newYork)).
+presentduringconvention(mr_Hamiltonfrom(stateOfUS(newYork))).
 presentduringconvention(stateOfUS(newJersey)).
 presentduringconvention(stateOfUS(pennsylvania)). 
 presentduringconvention(stateOfUS(delaware)).
@@ -712,10 +724,10 @@ amendmentapproved(1, 15, 12, 1791).
 
 powerless(congress, establishmentOfReligion).
 powerless(congress, prohibitionOf(freeExcersiseOfReligion)).
-right(people, freedomOfSpeech).
-right(people, freedomOfPress).
-right(people, freedomToPeacefullyAssemble).
-right(people, petitionFor(redressOfGrievances)).
+right(freedomOfSpeech, people).
+right(freedomOfPress, people).
+right(freedomToPeacefullyAssemble, people).
+right(petitionFor(redressOfGrievances), people).
 
 % ----------------------------------------------
 
@@ -723,7 +735,7 @@ right(people, petitionFor(redressOfGrievances)).
 
 amendmentapproved(2, 15, 12, 1791).
 
-right(people, keepAndBearArms).
+right(keepAndBearArms, people).
 
 % ----------------------------------------------
 
@@ -731,10 +743,10 @@ right(people, keepAndBearArms).
 
 amendmentapproved(3, 15, 12, 1791).
 
-right(soldier, timeOfPeace(cannot(quartaredInHouse))).
-right(soldier, timeOfPeace(permissionOfOwner(quartaredInHouse))).
-right(soldier, timeOfWar(cannot(quartaredInHouse))).
-right(soldier, timeOfWar(permissionOfOwner(quartaredInHouse))).
+right(timeOfPeace(permissionOfOwner(quartaredInHouse)), soldier).
+right(timeOfPeace(cannot(quartaredInHouse)), soldier).
+right(timeOfWar(cannot(quartaredInHouse)), soldier).
+right(timeOfWar(permissionOfOwner(quartaredInHouse)), soldier).
 
 % ----------------------------------------------
 
@@ -749,7 +761,7 @@ amendmentapproved(4, 15, 12, 1791).
 secure(inTheirPersons).
 secure(inTheirHouses).
 secure(ofTheirPapers).
-right(people, secure(X)).
+right(secure(X), people).
 powerless(government, unreasonableSearchesAndSeizures).
 powerless(government, warrants).
 supportedBy(oaths).
@@ -766,15 +778,15 @@ havePower(government, warrants, supportedBy(X)).
 amendmentapproved(5, 15, 12, 1791).
 
 required(grandJury, seriousCriminalCharges).
-inService(war).
-inService(publicDanger).
-right(people, inService(X), noTrial).
-right(people, sameOffence, noTrial).
-right(people, againstSelfIncrimination, noTrial).
-right(people, witnessAgainstHimself).
-right(people, life).
-right(people, liberty).
-right(people, property).
+noTrial_inService(war).
+noTrial_inService(publicDanger).
+right(noTrial_inService(X), people).
+right(noTrial_sameOffence, people).
+right(noTrial_againstSelfIncrimination, people).
+right(witnessAgainstHimself, people).
+right(life, people).
+right(liberty, people).
+right(property, people).
 
 % ----------------------------------------------
 
@@ -782,12 +794,12 @@ right(people, property).
 
 amendmentapproved(6, 15, 12, 1791).
 
-right(accused, speedyAndPublicTrial).
-right(accused, trialByAnImpartialJury, in(stateOfUS(district(X)))).
-right(accused, informationAboutNatureAndCauseOfAccusation).
-right(accused, confrontedWithWitnessesAgainstHim).
-right(accused, obtainWitnessesInHisFavour).
-right(accused, assistanceOfDefenceCounsel).
+right(speedyAndPublicTrial, accused).
+right(trialByAnImpartialJury, in(stateOfUS(district(X))), accused).
+right(informationAboutNatureAndCauseOfAccusation, accused).
+right(confrontedWithWitnessesAgainstHim, accused).
+right(obtainWitnessesInHisFavour, accused).
+right(assistanceOfDefenceCounsel, accused).
 
 % ----------------------------------------------
 
@@ -795,8 +807,8 @@ right(accused, assistanceOfDefenceCounsel).
 
 amendmentapproved(7, 15, 12, 1791).
 
-controversy(X).
-right(people, trialByJury, controversy(X)) :- X > 20.
+trialByJury_controversy(X).
+right(people, trialByJury_controversy(X)) :- X > 20.
 
 % ----------------------------------------------
 
@@ -811,7 +823,7 @@ notRequired(excessiveBail).
 notRequired(excessiveFines).
 notRequired(cruelPunishments).
 notRequired(unusualPunishmnets).
-right(people, notRequired(X)).
+right(notRequired(X), people).
 
 % ----------------------------------------------
 
@@ -819,8 +831,8 @@ right(people, notRequired(X)).
 
 amendmentapproved(9, 15, 12, 1791).
 
-right(people, deny, retainedBy(otherPeople)).
-right(people, disparage, retainedBy(otherPeople)).
+right(deny_retainedBy(otherPeople), people).
+right(disparage_retainedBy(otherPeople), people).
 
 % ----------------------------------------------
 
@@ -837,13 +849,13 @@ powerNotDelegatedtoUS(byConstitution, reservedTo(X)).
 % AMENDMENT 11
 
 jury(trialOfCrimes(X), stateOfUS(Y)) :- X =\= impeachement .
-jury(trialOfCrimes(X), foreignState(Y), congress) :- X =\= impeachement .
+jury(trialOfCrimes(X), foreignState(Y)) :- X =\= impeachement .
 
 % ----------------------------------------------
 
 % AMENDMENT 13 Section 1
 amendmentpassed(13,31,1,1865).
-amendementapproved(13,6,12,1865).
+amendmentapproved(13,6,12,1865).
 
 punishment(X,slavery) :- crime(X,convicted).
 punishment(X,nvoluntary_servitude) :- crime(X,convicted).
@@ -1037,7 +1049,7 @@ power(congress, enforce(amendment15)).
 % AMENDMENT 16
 
 amendmentpassed(13,2,7,1909).
-amendementapproved(13,3,2,1913).
+amendmentapproved(13,3,2,1913).
 
 power(congress,lay(taxes_on_income)).
 power(congress,collect(taxes_on_income)).
@@ -1120,11 +1132,11 @@ amendmentOperative(20, toConstitution, passed(legislatureOf(stateOfUS(X), A), Y)
 % AMENDMENT 22 Section 1
 
 % Functors used
-% notElected/2 Y is a the president in power and X is the president who has been elected.
+% notElected/2 Y is a the president in power and X is the president who has been elected
 
 amendmentpassed(22,21,3,1947).
-amendementapproved(22,27,2,1951).
-notElected(president,more_than_twice);
+amendmentapproved(22,27,2,1951).
+notElected(president,more_than_twice).
 notheldoffice(Y,president,Z):- president(X),Z>2.
 notheldoffice(Y,acting_president,Z):- president(X),Z>2.
 
@@ -1139,14 +1151,14 @@ operative(amendment_22) :- ratifiedYears(X,Y),X<7,Y>0.75.
 % AMENDMENT 23 Section 1
 
 amendmentpassed(23,16,6,1960).
-amendementapproved(23,29,3,1961).
+amendmentapproved(23,29,3,1961).
 power(congress,appoint(districtconstitutingseatofgovernment)).
 
 % ----------------------------------------------
 
 % AMENDMENT 23 Section 2
 
-power(congress,enforce(amendement_23)).
+power(congress,enforce(amendment_23)).
 
 % ----------------------------------------------
 
