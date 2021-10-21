@@ -626,6 +626,9 @@ nodenyvote(State) :- stateOfUS(State), consent(State, Consent), Consent = false.
 % ----------------------------------------------
 
 % ARTICLE 7
+% Functors used
+% witnesstoindependenceofUS/2 the first predicate is the state the person belongs too and the second is the person's name
+% presentduringconvention/2 the states which were present
 
 witnesstoindependenceofUS(stateOfUS(newHampshire),johnLangdon).
 witnesstoindependenceofUS(stateOfUS(newHampshire),nicholasGilman).
@@ -842,11 +845,14 @@ jury(trialOfCrimes(X), foreignState(Y), congress) :- X =\= impeachement .
 % ----------------------------------------------
 
 % AMENDMENT 13 Section 1
+% Functors used
+% punishment/2 the first is the person's name who has to face the slavery if he is convicted of a crime else no one should be made to face slavery.
+
 amendmentpassed(13,31,1,1865).
 amendementapproved(13,6,12,1865).
 
 punishment(X,slavery) :- crime(X,convicted).
-punishment(X,nvoluntary_servitude) :- crime(X,convicted).
+punishment(X,involuntary_servitude) :- crime(X,convicted).
 
 % ----------------------------------------------
 
