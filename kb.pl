@@ -83,14 +83,14 @@ notElector(Person) :- senator(Person); representative(Person).
 
 
 
-% Ammendment 12
+% Amendment 12
 votes(elector, "President").
 votes(elector, "Vice president").
 maxPresidentVotes(Person, "President").
 maxVicePresidentVotes(Person, "Vice president").
 eligible_for_vicePresident(Person):- eligible_for_president(Person).
 
-% Ammendment 20 section 3
+% Amendment 20 section 3
 
 citizenEligible(Person):- citizen(Person, Y), Y>=14.
 ageEligible(Person):- age(Person, Y), Y>= 35.
@@ -99,7 +99,8 @@ eligible_for_president(Person) :-
     citizenEligible(Person),
     ageEligible(Person).
 
-% amendment 25.
+
+%Amendment 25.
 %section 1
 newPresident(vicePresident):- removedFromOffice(president); death(president); resignation(president).
 
@@ -138,8 +139,16 @@ power(president, "convene both Houses").
 
 removedFromOffice(member(X, [president, vice_president, "all civil Officers"]), Reason):- member(Reason, ["Treason", "Bribery", "high crimes"]). 
 
+%Amendment 21
 
+%section 1
+article(18, "repealed").
 
+%section 2
+prohibitedInUS(violation("state liquour laws")).
+
+%section 3
+ammendmentInoperative(27):- ratifiedAmmendment(27).
 
 %amendment 27 
 varyCompensation(senator, houseOfRepresentatives, nextElections).
