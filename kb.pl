@@ -58,7 +58,7 @@ consist(congress,houseOfRepresentatives).
 % durationOfSenator/1 specifies the duration of years a person will serve as a senator
 % senator/1 refers to senators
 % choosenBy/1 implies selected by the variable passed
-% senateOfUS/4 checks validity of the whole senate
+% senate/4 checks validity of the whole senate
 % electors/1 checks requisite qualifications
 % firstClass/1 checks if there have been vacancies after specified years
 % vacatedAt/1 checks the year of vacancy
@@ -81,9 +81,11 @@ consist(congress,houseOfRepresentatives).
 noOfVotesPerSenator(1).
 noOfSenatorsPerState(2).
 durationOfSenator(6).
-senators(choosenBy(legislature)).
-senateOfUS(X, Y, Z, W) :-
-    senators(X),
+senators(obama, choosenBy(legislature)).% Fact added to test senator/2
+senators(kamala, choosenBy(legislature)).% Fact added to test senator/2
+
+senate(X, Y, Z, W) :-
+    senators(X,choosenBy(legislature)),
     noOfSenatorsPerState(Y),
     noOfVotesPerSenator(Z),
     durationOfSenator(W).
@@ -98,7 +100,7 @@ divisionOfSenate(X, Y, Z) :- firstClass(X), secondClass(Y), thirdClass(Z).
 % vacancies(byResignation; recessOfLegislature).
 % tempArrang(executive, vacancies, nextMeetingOfLegislature).
 tempArrang(legislature, stateOfUS(Y)).
-vacancies(senateOfUS(state), executiveAuthority(issueWrits), tempArrang(X)).
+vacancies(senate(state), executiveAuthority(issueWrits), tempArrang(X)).
 fillVacancies(legislature).
 
 age_qualified_Senator(S,X) :- age(S,X), X >=36.
@@ -109,13 +111,13 @@ qualified_Senator([S,X,Y,Z]) :-
     citizen_qualified_Senator(S,Y),
     state_qualified_Senator(S,Z).
 
-vPOTUS(presidentOf(senateOfUS)).
+vPOTUS(presidentOf(senate)).
 votingVPOTUS(equalHouse).
 
 otherOfficers(absenceOf(vPOTUS); officeOFTPOTUS(vPOTUS)).
 presidentProTempore(absenceOf(vPOTUS)).
 
-powerOfImpeachement(senateOfUS, (oath; affirmation), present(twothirdOfMembers).).
+powerOfImpeachement(senate, (oath; affirmation), present(twothirdOfMembers).).
 trialOfPOTUS(present(twothirdOfMembers), present(chiefJustice)).
 
 successfulImpeachement(senator(X)) :-
@@ -266,7 +268,7 @@ conventions([H|T]) :- stateOfUS(H), conventions(T).
 conventions(preventMisconstruction, addClauses).
 conventions(preventAbuseOfPower, addClauses).
 
-resolvedBy(senateOfUS, houseOfRepresentatives, assemblyOfCongress, bothHouses(twothirdOfMembers)).
+resolvedBy(senate, houseOfRepresentatives, assemblyOfCongress, bothHouses(twothirdOfMembers)).
 proposedTo(legislature(stateOfUS(X)), amendments, ratifiedBy(threefourthOfLegislatures)).
 
 articles(proposedBy(congress), ratifiedBy(legislatureOf(stateOfUS(X)))).
@@ -388,7 +390,7 @@ endOfTerm(representatives, day(D,M,T)) :- D =:= 3, M =:= january, T =:= 1200.
 % Amendment 20 Section 4
 
 death(president, choosenBy(houseOfRepresentatives)).
-death(vPOTUS, choosenBy(senateOfUS)).
+death(vPOTUS, choosenBy(senate)).
 
 % Amendment 20 Section 5
 
