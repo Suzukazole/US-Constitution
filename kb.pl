@@ -99,8 +99,18 @@ eligible_for_president(Person) :-
     citizenEligible(Person),
     ageEligible(Person).
 
-% ammendment 25.
+% amendment 25.
+%section 1
+newPresident(vicePresident):- removedFromOffice(president); death(president); resignation(president).
 
+%section 2 
+nominate(vicePresident):- vacancies(vicePresident), congressConsent(true).
+
+%section 3
+actingPresident(vicePresident):- writtenDeclaration(president, "unable to discharge the powers and duties of his office").
+
+%section 4
+actingPresident(vicePresident):- writtenDeclaration(vicePresident, "president is unable to discharge the powers and duties of his office"), writtenDeclaration(executive, "president is unable to discharge the powers and duties of his office").
 
 compensation(president).
 oathPresident("I do solemnly swear (or affirm) that I will faithfully execute the Office of President of the United States, and will to the best of my Ability, preserve, protect and defend the Constitution of the United States").
@@ -127,3 +137,9 @@ power(president, "convene both Houses").
 %section 4
 
 removedFromOffice(member(X, [president, vice_president, "all civil Officers"]), Reason):- member(Reason, ["Treason", "Bribery", "high crimes"]). 
+
+
+
+
+%amendment 27 
+varyCompensation(senator, houseOfRepresentatives, nextElections).
