@@ -94,7 +94,7 @@ secondClass(vacatedAt(fourthYear)).
 thirdClass(vacatedAt(sixthYear)).
 divisionOfSenate(X, Y, Z) :- firstClass(X), secondClass(Y), thirdClass(Z).
 
-% Changes due to Amendment XVII
+% Changes due to Amendment 17
 % vacancies(byResignation; recessOfLegislature).
 % tempArrang(executive, vacancies, nextMeetingOfLegislature).
 tempArrang(legislature, stateOfUS(Y)).
@@ -139,7 +139,7 @@ legislature(elections(time), elections(place), elections(manner)).
 congress(elections(time), elections(place), elections(manner), notChoosing(senators)).
 
 assemblyOfCongress(X) :- 
-    (onceEveryYear(X), thirdDayOfJan(X), time(noon(X))); % Changes due to Amendment XX Section 2
+    (onceEveryYear(X), thirdDayOfJan(X), time(noon(X))); % Changes due to Amendment 20 Section 2
     appointedByLaw(X).
 
 % Article 1 Section 5
@@ -271,7 +271,7 @@ proposedTo(legislature(stateOfUS(X)), amendments, ratifiedBy(threefourthOfLegisl
 
 articles(proposedBy(congress), ratifiedBy(legislatureOf(stateOfUS(X)))).
 
-% Amendment I
+% Amendment 1
 
 % powerless/2 cases where an individual or an institution does not have any influence
 % right/2 rights available to citizens of the US 
@@ -283,18 +283,18 @@ right(people, freedomOfPress).
 right(people, freedomToPeacefullyAssemble).
 right(people, petitionFor(redressOfGrievances)).
 
-% Amendment II
+% Amendment 2
 
 right(people, keepAndBearArms).
 
-% Amendment III
+% Amendment 3
 
 right(soldier, timeOfPeace(cannot(quartaredInHouse))).
 right(soldier, timeOfPeace(permissionOfOwner(quartaredInHouse))).
 right(soldier, timeOfWar(cannot(quartaredInHouse))).
 right(soldier, timeOfWar(permissionOfOwner(quartaredInHouse))).
 
-% Amendment IV
+% Amendment 4
 
 % secure/1 cases when an individual or an institution has immunity
 % supportedBy/1 supported By these laws
@@ -309,9 +309,10 @@ supportedBy(oaths).
 supportedBy(affirmation).
 havePower(government, warrants, supportedBy(X)).
 
-% Amendment V
+% Amendment 5
 
 % required/2 conditions required to conduct a trial against serious Criminal Charges
+
 
 required(grandJury, seriousCriminalCharges).
 inService(war).
@@ -324,7 +325,7 @@ right(people, life).
 right(people, liberty).
 right(people, property).
 
-% Amendment VI
+% Amendment 6
 
 right(accused, speedyAndPublicTrial).
 right(accused, trialByAnImpartialJury, in(stateOfUS(district(X)))).
@@ -333,12 +334,12 @@ right(accused, confrontedWithWitnessesAgainstHim).
 right(accused, obtainWitnessesInHisFavour).
 right(accused, assistanceOfDefenceCounsel).
 
-% Amendment VII
+% Amendment 7
 
 controversy(X).
 right(people, trialByJury, controversy(X)) :- X > 20.
 
-% Amendment VIII
+% Amendment 8
 
 % notRequired/1 cases where certain actions are not required 
 
@@ -348,13 +349,52 @@ notRequired(cruelPunishments).
 notRequired(unusualPunishmnets).
 right(people, notRequired(X)).
 
-% Amendment IX
+% Amendment 9
 
 right(people, deny, retainedBy(otherPeople)).
 right(people, disparage, retainedBy(otherPeople)).
 
-% Amendment X
+% Amendment 10
 
 reservedTo(stateOfUS(X)).
 reservedTo(people).
 powerNotDelegatedtoUS(byConstitution, reservedTo(X)).
+
+% Amendment 20 Section 1
+
+% endOfTerm/2 specifies the date and time of the end of term of the elected representatives
+
+endOfTerm(president, day(D,M,T)) :- D =:= 20, M =:= january, T =:= 1200.
+endOfTerm(vPOTUS, day(D,M,T)) :- D =:= 20, M =:= january, T =:= 1200.
+endOfTerm(senators, day(D,M,T)) :- D =:= 3, M =:= january, T =:= 1200.
+endOfTerm(representatives, day(D,M,T)) :- D =:= 3, M =:= january, T =:= 1200.
+
+% Amendment 20 Section 4
+
+death(president, choosenBy(houseOfRepresentatives)).
+death(vPOTUS, choosenBy(senateOfUS)).
+
+% Amendment 20 Section 5
+
+% amendmentenforced/5 states that amendment number in first argument, section number in the second argument, was passed on the date in third argument, month in fourth and year in fifth
+
+amendmentenforced(20,1,15,10,1933).
+amendmentenforced(20,2,15,10,1933).
+
+% Amendment 20 Section 6
+
+% amendmentOperative/3 states the amendment number in the first argument, second argument consists of the orignal document which is to be ratified and the third argument checks if it has been passed
+
+amendmentOperative(20, toConstitution, passed(legislatureOf(stateOfUS(X), A), Y)) :- A>=0.75, Y<7.
+
+% Amendment 24 Section 1
+
+amendmentpassed(20,27,8,1962).
+amendmentapproved(20, 23,1,1964).
+
+right(citizen, vote(election)).
+
+% Amendment 24 Section 2
+
+power(congress, enforce(amendment(24))).
+
