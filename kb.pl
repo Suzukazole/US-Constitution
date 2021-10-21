@@ -1,13 +1,10 @@
 /* 
 Name: A.Sudarshan
 ID: 2019B4A70744P
-
 Name: Ashwin Murali
 ID: 2019B2A70957P
-
 Name: Hari Sankar
 ID: 2019B3A70564P
-
 Name: Ruchir Kumbhare
 ID: 2019B5A70650P
 */
@@ -253,10 +250,22 @@ presidentProTempore(absenceOf(vPOTUS)).
 powerOfImpeachement(senate, (oath; affirmation), present(twothirdOfMembers)).
 trialOfPOTUS(present(twothirdOfMembers), present(chiefJustice)).
 
+senator(john).% Fact added to test senator/1
+removalFromOffice(john).% Fact added to test removalFromOffice/1
+disqualification(john).% Fact added to test disqualification/1
+noTrust(john).% Fact added to test noTrust/1
+noProfit(john).% Fact added to test noProfit/1
+
 successfulImpeachement(senator(X)) :-
     removalFromOffice(X),
     disqualification(X),
     noTrust(X); noProfit(X).
+
+party(republicans).% Fact added to test party/1
+indictment(republicans).% Fact added to test indictment/1
+trial(republicans).% Fact added to test trial/1
+judgment(republicans).% Fact added to test judgment/1
+punishment(republicans).% Fact added to test punishment/1
 
 successfulImpeachement(party(X)) :-
     indictment(X),
@@ -276,8 +285,12 @@ successfulImpeachement(party(X)) :-
 legislature(elections(time), elections(place), elections(manner)).
 congress(elections(time), elections(place), elections(manner), notChoosing(senators)).
 
-assemblyOfCongress(X) :- 
-    (onceEveryYear(X), thirdDayOfJan(X), time(noon(X))); % Changes due to Amendment 20 Section 2
+time(noon(12)).% Fact added to test time/1
+assemblyOfCongress(3, january, time(X)).% Fact added to test assemblyOfCongress/3
+appointedByLaw(constitution).% Fact added to test appointedByLaw/1
+
+assemblyOfCongress(D,M,T,X) :- 
+    (onceEveryYear(D), thirdDayOfJan(M), time(noon(T))); % Changes due to Amendment 20 Section 2
     appointedByLaw(X).
 
 %--------------------------------------------------------
@@ -301,15 +314,20 @@ judgeOfElections(house).
 returnsOfMembers(house).
 qualificationsOfMembers(house).
 quorumForBuisness(house, majority).
-adjournHouse(house, X) :- X < majority.
+adjournHouse(house, 0.3).% Fact added to test adjournHouse/2
+adjournHouse(house, X) :- X < 0.5.
 absentMembers(house, penalties).
 
 rulesOfProceedings(house).
 punishMembers(house, disorderlyBehaviour).
-expelMember(house, disorderlyBehaviour, twothirdOfMembers).
+members(0.7).% Fact added to test members/1
+expelMember(house, disorderlyBehaviour, members(X)) :- X>0.66.
 
 journalOfProceedings(house).
 publishJOP(house, notPublish(requireSecrecy), answersToQuestions(onefifthOfPresent)).
+
+adjournHouse(congress, consentOfOtherHouse, oneHouseSitting).% Fact added to test adjournHouse/3
+adjournHouse(congress, 2, oneHouseSitting).% Fact added to test adjournHouse/3
 
 adjournHouse(congress, consentOfOtherHouse, Place) :- Place =\= twoHousesSitting.
 adjournHouse(congress, Days, Place) :- 
@@ -539,6 +557,7 @@ war(X, Y) :- stateOfUS(X), consentOfCongress(Congress), Consent = true, invaded(
 judicialPower(supremeCourt).
 judicialPower(lowerCourts, ordain(congress)).
 compensation(basePay).
+compensation(basePay*2).% Fact added to test compensation/1
 judges(supremeCourt, goodBehaviour, compensation(X)) :- X > basePay .
 judges(lowerCourts, goodBehaviour, compensation(X)) :- X > basePay .
 
@@ -565,6 +584,10 @@ judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), citizenOf(stateOfUS(X)
 judicialPower(landsOfDiffStates, citizenOf(stateOfUS(X)), stateOfUS(Y)).
 
 % Changes due to Amendment 11
+trialOfCrimes(felony).% Fact added to test trialOfCrimes/1
+trialOfCrimes(treason).% Fact added to test trialOfCrimes/1
+trialOfCrimes(murder).% Fact added to test trialOfCrimes/1
+
 jury(trialOfCrimes(X), stateOfUS(Y)) :- X =\= impeachement .
 jury(trialOfCrimes(X), foreignState(Y)) :- X =\= impeachement .
 
@@ -814,8 +837,11 @@ right(X, property) :- citizen(X,Y).
 
 amendmentapproved(6, 15, 12, 1791).
 
+stateOfUS(california, district(sanDiego)).% Fact added to test stateOfUS/2
+stateOfUS(newYork, district(1)).% Fact added to test stateOfUS/2
+
 right(accused, speedyAndPublicTrial).
-right(accused, trialByAnImpartialJury, in(stateOfUS(district(X)))).
+right(accused, trialByAnImpartialJury, in(stateOfUS(X, district(Y)))).
 right(accused, informationAboutNatureAndCauseOfAccusation).
 right(accused, confrontedWithWitnessesAgainstHim).
 right(accused, obtainWitnessesInHisFavour).
@@ -827,7 +853,7 @@ right(accused, assistanceOfDefenceCounsel).
 
 amendmentapproved(7, 15, 12, 1791).
 
-trialByJury_controversy(X).
+trialByJury_controversy(30).% Fact added to test controversy/1
 right(Y, trialByJury_controversy(X)) :- X > 20, citizen(Y,Z).
 
 % ----------------------------------------------
@@ -1235,14 +1261,3 @@ amendmentapproved(26, 01, 07, 1971). % Amendment 26 was approved on 1st July 197
 power(congress,enforce(amendment26)).
 
 % ----------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
