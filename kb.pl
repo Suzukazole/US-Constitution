@@ -863,6 +863,7 @@ jury(trialOfCrimes(X), foreignState(Y)) :- X =\= impeachement .
 amendmentpassed(13,31,1,1865).
 amendmentapproved(13,6,12,1865).
 
+crime(rohan,convicted).
 punishment(X,slavery) :- crime(X,convicted).
 punishment(X,involuntary_servitude) :- crime(X,convicted).
 
@@ -1140,10 +1141,13 @@ amendmentOperative(20, toConstitution, passed(legislatureOf(stateOfUS(X), A), Y)
 % Functors used
 % notElected/2 Y is a the president in power and X is the president who has been elected
 
+president_not_elected(rahul).
+years_as_president(3).
+president(krishna).
 amendmentpassed(22,21,3,1947).
 amendmentapproved(22,27,2,1951).
 notElected(president,more_than_twice).
-notheldoffice(Y,president,Z):- president(X),Z>2.
+notheldoffice(Y,president,Z):- president(X),years_as_president(Z), Z>2, president_not_elected(Y).
 notheldoffice(Y,acting_president,Z):- president(X),Z>2.
 
 % ----------------------------------------------
