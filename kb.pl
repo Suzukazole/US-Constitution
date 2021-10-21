@@ -319,7 +319,7 @@ memberOfHouse(notAllowed(memberOfCivilOffice)).
 
 %--------------------------------------------------------
 
-%ARTICLE 1 Section 7
+% ARTICLE 1 Section 7
 
 power(houseofRepresentatives, raise(revenue_bills)).
 power(senate, propose(amendments_bills)).
@@ -832,6 +832,13 @@ powerNotDelegatedtoUS(byConstitution, reservedTo(X)).
 
 % ----------------------------------------------
 
+% AMENDMENT 11
+
+jury(trialOfCrimes(X), stateOfUS(Y)) :- X =\= impeachement .
+jury(trialOfCrimes(X), foreignState(Y), congress) :- X =\= impeachement .
+
+% ----------------------------------------------
+
 % AMENDMENT 13 Section 1
 amendmentpassed(13,31,1,1865).
 amendementapproved(13,6,12,1865).
@@ -839,9 +846,13 @@ amendementapproved(13,6,12,1865).
 punishment(X,slavery) :- crime(X,convicted).
 punishment(X,nvoluntary_servitude) :- crime(X,convicted).
 
+% ----------------------------------------------
+
 % AMENDMENT 13 Section 2
 enforce(article_by_appropriate_legislation).
 power(congress,enforce(article_by_appropriate_legislation)).
+
+% ----------------------------------------------
 
 % AMENDMENT 14 Section 1
 
@@ -1028,6 +1039,15 @@ amendementapproved(13,3,2,1913).
 
 power(congress,lay(taxes_on_income)).
 power(congress,collect(taxes_on_income)).
+
+% ----------------------------------------------
+
+% AMENDMENT 17
+% vacancies(byResignation; recessOfLegislature).
+% tempArrang(executive, vacancies, nextMeetingOfLegislature).
+tempArrang(legislature, stateOfUS(Y)).
+vacancies(senate(state), executiveAuthority(issueWrits), tempArrang(X)).
+fillVacancies(legislature).
 
 % ----------------------------------------------
 
