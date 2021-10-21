@@ -92,7 +92,9 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 % denied/2 holds if the right in first argument is denied on account of second argument
 % notdenied/2 holds if the right in first argument can't be denied on account of second argument
 
-elected(X,Y,people,Z).
+elected(david, massachusetts, people, massachusetts). % Fact added to test elected/4
+elected(leonard, connecticut, people, connecticut). % Fact added to test elected/4
+elected(meera, newJersey, people, newYork). % Fact added to test elected/4
 age_qualified_HOR(H) :- age(H,X), X >=25.
 citizen_qualified_HOR(H) :- citizen(H,Y), Y >=7.
 state_qualified_HOR(H,X) :- stateOfUS(X), elected(H,X,people,X).
