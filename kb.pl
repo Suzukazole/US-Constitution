@@ -564,7 +564,7 @@ attainerOfTreason(cannotWork(forfeiture)).
 
 % ----------------------------------------------
 
-%ARTICLE 4 Section 1
+% ARTICLE 4 Section 1
 
 faithandcredit(X,publicact(Z),Y):- stateOfUS(X),stateOfUS(Y).
 faithandcredit(X,records(Z),Y):- stateOfUS(X),stateOfUS(Y).
@@ -679,6 +679,8 @@ presentduringconvention(stateOfUS(northCarolina)).
 presentduringconvention(stateOfUS(southCarolina)).
 presentduringconvention(stateOfUS(georgia)).
 
+% ----------------------------------------------
+% **************************************THE AMENDMENTS TO THE CONSTITUTION OF THE UNITED STATES AS RATIFIED BY THE STATES*********************************************
 
 % Preamble to the Bill of Rights
 
@@ -1082,6 +1084,13 @@ endOfTerm(representatives, day(D,M,T)) :- D =:= 3, M =:= january, T =:= 1200.
 
 % ----------------------------------------------
 
+% AMENDMENT 20 Section 2
+
+assemblyOfCongress(X) :- 
+    (onceEveryYear(X), thirdDayOfJan(X), time(noon(X))); appointedByLaw(X).
+
+% ----------------------------------------------
+
 % AMENDMENT 20 Section 4
 
 death(president, choosenBy(houseOfRepresentatives)).
@@ -1112,6 +1121,7 @@ amendmentOperative(20, toConstitution, passed(legislatureOf(stateOfUS(X), A), Y)
 
 % Functors used
 % notElected/2 Y is a the president in power and X is the president who has been elected.
+
 amendmentpassed(22,21,3,1947).
 amendementapproved(22,27,2,1951).
 notElected(president,more_than_twice);
@@ -1121,11 +1131,13 @@ notheldoffice(Y,acting_president,Z):- president(X),Z>2.
 % ----------------------------------------------
 
 % AMENDMENT 22 Section 2
+
 operative(amendment_22) :- ratifiedYears(X,Y),X<7,Y>0.75.
 
 % ----------------------------------------------
 
 % AMENDMENT 23 Section 1
+
 amendmentpassed(23,16,6,1960).
 amendementapproved(23,29,3,1961).
 power(congress,appoint(districtconstitutingseatofgovernment)).
@@ -1133,6 +1145,7 @@ power(congress,appoint(districtconstitutingseatofgovernment)).
 % ----------------------------------------------
 
 % AMENDMENT 23 Section 2
+
 power(congress,enforce(amendement_23)).
 
 % ----------------------------------------------
