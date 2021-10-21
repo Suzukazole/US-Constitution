@@ -99,8 +99,9 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 % total/3 finds length of the list in first argument and puts it in third argument
 % num_representatives/1 has a list of number of representatives in each state, and gives upper and lower bounds on representation
 % sum/3 calculates the sum elements of the list in first argument using accumulator in second argument and saves result in last argument
-% right/2 states that the right in first argument holds for second argument
+% right/2 states that the right in second argument holds for first argument
 % male/1 holds if the person (name in argument) is a male
+% female/1 holds if the person (name in argument) is a female
 % denied/2 holds if the right in first argument is denied on account of second argument
 % notdenied/2 holds if the right in first argument can't be denied on account of second argument
 
@@ -110,8 +111,16 @@ elected(meera, newJersey, people, newYork). % Fact added to test elected/4
 age_qualified_HOR(H) :- age(H,X), X >=25.
 citizen_qualified_HOR(H) :- citizen(H,Y), Y >=7.
 state_qualified_HOR(H,X) :- stateOfUS(X), elected(H,X,people,X).
-qualified([], houseOfRepresentatives).
-qualified([H|T],houseOfRepresentatives) :- age_qualified_HOR(H), citizen_qualified_HOR(H), state_qualified_HOR(H,Q), qualified(T,houseOfRepresentatives).
+
+% rem_dup([H|T], A, List) :- member(H, A), rem_dup(T, A, List).
+% rem_dup([H|T], A1, List) :- \+member(H, A1),
+%                             append(A1, [H], A),
+%                             rem_dup(T, A, List).
+% rem_dup([], A, A).
+% set(X, Y) :- rem_dup(X, [], Y). 
+
+% qualified([], houseOfRepresentatives).
+qualified(H,houseOfRepresentatives) :- age_qualified_HOR(H), citizen_qualified_HOR(H), state_qualified_HOR(H,Q).
 
 members(X) :- qualified([X|T],houseOfRepresentatives); member(X,T).
 consist(houseOfRepresentatives, members(X)).
@@ -124,15 +133,23 @@ sum([No_of_FreePersons, No_of_Indians_not_taxed], 0, CountOfRepresentatives).
 right(A,B).
 
 % Changes due to Amendment 26 Section 1
-notdenied(right(vote_elect(X), Y), on_account_of_age) :- citizen(Y,Z), age(Y, Age), Age >= 18.
+notdenied(right(Y, vote_elect(X)), on_account_of_age) :- citizen(Y,Z), age(Y, Age), Age >= 18.
 
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(elector_for_President), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(elector_for_Vice_President), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(representative_in_congress), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(executive_officers), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(judicial_officers), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(members_of_legislature), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(members_of_legislature), X), Y).
+age(george, 50). %Fact added to test right/2 and other functors
+citizen(george, 45). %Fact added to test right/2 and other functors
+male(rohan). %Fact added to test right/2 and other functors
+male(david). %Fact added to test right/2 and other functors
+male(leonard). %Fact added to test right/2 and other functors
+male(george). %Fact added to test right/2 and other functors
+female(X) :- \+male(X).
+
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(elector_for_President)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(elector_for_Vice_President)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(representative_in_congress)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(executive_officers)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(judicial_officers)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(members_of_legislature)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(members_of_legislature)), Y).
 sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
 
 stateOfUS(rhodeisland). %Fact added to be used further
@@ -724,10 +741,10 @@ amendmentapproved(1, 15, 12, 1791).
 
 powerless(congress, establishmentOfReligion).
 powerless(congress, prohibitionOf(freeExcersiseOfReligion)).
-right(freedomOfSpeech, people).
-right(freedomOfPress, people).
-right(freedomToPeacefullyAssemble, people).
-right(petitionFor(redressOfGrievances), people).
+right(X, freedomOfSpeech) :- citizen(X,Y).
+right(X, freedomOfPress) :- citizen(X,Y).
+right(X, freedomToPeacefullyAssemble) :- citizen(X,Y).
+right(X, petitionFor(redressOfGrievances)) :- citizen(X,Y).
 
 % ----------------------------------------------
 
@@ -735,7 +752,7 @@ right(petitionFor(redressOfGrievances), people).
 
 amendmentapproved(2, 15, 12, 1791).
 
-right(keepAndBearArms, people).
+right(X, keepAndBearArms) :- citizen(X,Y).
 
 % ----------------------------------------------
 
@@ -743,10 +760,10 @@ right(keepAndBearArms, people).
 
 amendmentapproved(3, 15, 12, 1791).
 
-right(timeOfPeace(permissionOfOwner(quartaredInHouse)), soldier).
-right(timeOfPeace(cannot(quartaredInHouse)), soldier).
-right(timeOfWar(cannot(quartaredInHouse)), soldier).
-right(timeOfWar(permissionOfOwner(quartaredInHouse)), soldier).
+right(soldier, timeOfPeace(permissionOfOwner(quartaredInHouse))).
+right(soldier, timeOfPeace(cannot(quartaredInHouse))).
+right(soldier, timeOfWar(cannot(quartaredInHouse))).
+right(soldier, timeOfWar(permissionOfOwner(quartaredInHouse))).
 
 % ----------------------------------------------
 
@@ -761,7 +778,7 @@ amendmentapproved(4, 15, 12, 1791).
 secure(inTheirPersons).
 secure(inTheirHouses).
 secure(ofTheirPapers).
-right(secure(X), people).
+right(Y, secure(X)) :- citizen(Y,Z).
 powerless(government, unreasonableSearchesAndSeizures).
 powerless(government, warrants).
 supportedBy(oaths).
@@ -780,13 +797,13 @@ amendmentapproved(5, 15, 12, 1791).
 required(grandJury, seriousCriminalCharges).
 noTrial_inService(war).
 noTrial_inService(publicDanger).
-right(noTrial_inService(X), people).
-right(noTrial_sameOffence, people).
-right(noTrial_againstSelfIncrimination, people).
-right(witnessAgainstHimself, people).
-right(life, people).
-right(liberty, people).
-right(property, people).
+right(Y, noTrial_inService(X)) :- citizen(Y,Z).
+right(X, noTrial_sameOffence) :- citizen(X,Y).
+right(X, noTrial_againstSelfIncrimination) :- citizen(X,Y).
+right(X, witnessAgainstHimself) :- citizen(X,Y).
+right(X, life) :- citizen(X,Y).
+right(X, liberty) :- citizen(X,Y).
+right(X, property) :- citizen(X,Y).
 
 % ----------------------------------------------
 
@@ -794,12 +811,12 @@ right(property, people).
 
 amendmentapproved(6, 15, 12, 1791).
 
-right(speedyAndPublicTrial, accused).
-right(trialByAnImpartialJury, in(stateOfUS(district(X))), accused).
-right(informationAboutNatureAndCauseOfAccusation, accused).
-right(confrontedWithWitnessesAgainstHim, accused).
-right(obtainWitnessesInHisFavour, accused).
-right(assistanceOfDefenceCounsel, accused).
+right(accused, speedyAndPublicTrial).
+right(accused, trialByAnImpartialJury, in(stateOfUS(district(X)))).
+right(accused, informationAboutNatureAndCauseOfAccusation).
+right(accused, confrontedWithWitnessesAgainstHim).
+right(accused, obtainWitnessesInHisFavour).
+right(accused, assistanceOfDefenceCounsel).
 
 % ----------------------------------------------
 
@@ -808,7 +825,7 @@ right(assistanceOfDefenceCounsel, accused).
 amendmentapproved(7, 15, 12, 1791).
 
 trialByJury_controversy(X).
-right(people, trialByJury_controversy(X)) :- X > 20.
+right(Y, trialByJury_controversy(X)) :- X > 20, citizen(Y,Z).
 
 % ----------------------------------------------
 
@@ -823,7 +840,7 @@ notRequired(excessiveBail).
 notRequired(excessiveFines).
 notRequired(cruelPunishments).
 notRequired(unusualPunishmnets).
-right(notRequired(X), people).
+right(Y, notRequired(X)) :- citizen(Y,Z).
 
 % ----------------------------------------------
 
@@ -831,8 +848,8 @@ right(notRequired(X), people).
 
 amendmentapproved(9, 15, 12, 1791).
 
-right(deny_retainedBy(otherPeople), people).
-right(disparage_retainedBy(otherPeople), people).
+right(X, deny_retainedBy(otherPeople)) :- citizen(X,Y).
+right(X, disparage_retainedBy(otherPeople)) :- citizen(X,Y).
 
 % ----------------------------------------------
 
@@ -882,6 +899,11 @@ power(congress,enforce(article_by_appropriate_legislation)).
 amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
 amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
 
+natural_born(rohan).
+natural_born(meera).
+natural_born(david).
+natural_born(leonard).
+
 citizen(X, Y) :- natural_born(X), age(X, Y).
 notenforce(X, Law) :- stateOfUS(X), abridges_privelegies(citizen(A,B), Abridges), abridges_immunities(citizen(A,B), Abridges), Abridges = true.
 notmakelaw(X, Law) :- stateOfUS(X), abridges_privelegies(citizen(A,B), Abridges), abridges_immunities(citizen(A,B), Abridges), Abridges = true.
@@ -898,7 +920,7 @@ deprive(X, citizen(A,B), equal_protection_of_law) :- stateOfUS(X), process_of_la
 % amendmentpassed/4 states that amendment number in first argument was passed on the date in second argument, month in third and year in fourth
 % amendmentapproved/4 states that amendment number in first argument was approved on the date in second argument, month in third and year in fourth
 % sum/3 calculates the sum elements of the list in first argument using accumulator in second argument and saves result in last argument
-% right/2 states that the right in first argument holds for second argument
+% right/2 states that the right in second argument holds for first argument
 % male/1 holds if the person (name in argument) is a male
 % denied/2 holds if the right in first argument is denied on account of second argument
 % notdenied/2 holds if the right in first argument can't be denied on account of second argument
@@ -915,14 +937,14 @@ sum([No_of_FreePersons, No_of_Indians_not_taxed], 0, CountOfRepresentatives).
 right(A,B).
 
 % Changes due to Amendment 26 Section 1
-notdenied(right(vote_elect(X), Y), on_account_of_age) :- citizen(Y,_), age(Y, Age), Age >= 18.
+notdenied(right(Y, vote_elect(X)), on_account_of_age) :- citizen(Y,_), age(Y, Age), Age >= 18.
 
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(elector_for_Vice_President), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(elector_for_President), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(representative_in_congress), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(executive_officers), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(judicial_officers), X), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(members_of_legislature), X), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, elector_for_Vice_President)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, elector_for_President)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, representative_in_congress)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, executive_officers)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, judicial_officers)), Y).
+sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, members_of_legislature)), Y).
 sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
 
 % ----------------------------------------------
@@ -939,38 +961,38 @@ sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0,
 amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
 amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
 
-qualified([], X) :- X = senate; X = representative_in_congress;
-                    X = elector_for_President; X = elector_for_Vice_President;
-                    X = civil_office; X = military_office.
-qualified([H|T],senate) :- (not(qualified([H|T1], member_congress));
-                      not(qualified([H|T2], office_of_US));
-                      not(qualified([H|T3], member_congress));
-                      not(qualified([H|T4], member_of_state_legislature))), qualified(T, senate).
+% qualified([], X) :- X = senate; X = representative_in_congress;
+%                     X = elector_for_President; X = elector_for_Vice_President;
+%                     X = civil_office; X = military_office.
+qualified(H, senate) :- (not(qualified(H, member_congress));
+                      not(qualified(H, office_of_US));
+                      not(qualified(H, member_congress));
+                      not(qualified(H, member_of_state_legislature))).
 
-qualified([H|T],representative_in_congress) :- (not(qualified([H|T1], member_congress));
-                    not(qualified([H|T2], office_of_US));
-                    not(qualified([H|T3], member_congress));
-                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, representative_in_congress).
+qualified(H,representative_in_congress) :- (not(qualified(H, member_congress));
+                    not(qualified(H, office_of_US));
+                    not(qualified(H, member_congress));
+                    not(qualified(H, member_of_state_legislature))), qualified(T, representative_in_congress).
 
-qualified([H|T],elector_for_President) :- (not(qualified([H|T1], member_congress));
-                    not(qualified([H|T2], office_of_US));
-                    not(qualified([H|T3], member_congress));
-                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, elector_for_President).
+qualified(H,elector_for_President) :- (not(qualified(H, member_congress));
+                    not(qualified(H, office_of_US));
+                    not(qualified(H, member_congress));
+                    not(qualified(H, member_of_state_legislature))), qualified(T, elector_for_President).
 
-qualified([H|T],elector_for_Vice_President) :- (not(qualified([H|T1], member_congress));
-                    not(qualified([H|T2], office_of_US));
-                    not(qualified([H|T3], member_congress));
-                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, elector_for_Vice_President).
+qualified(H,elector_for_Vice_President) :- (not(qualified(H, member_congress));
+                    not(qualified(H, office_of_US));
+                    not(qualified(H, member_congress));
+                    not(qualified(H, member_of_state_legislature))), qualified(T, elector_for_Vice_President).
 
-qualified([H|T],civil_office) :- (not(qualified([H|T1], member_congress));
-                    not(qualified([H|T2], office_of_US));
-                    not(qualified([H|T3], member_congress));
-                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, civil_office).
+qualified(H,civil_office) :- (not(qualified(H, member_congress));
+                    not(qualified(H, office_of_US));
+                    not(qualified(H, member_congress));
+                    not(qualified(H, member_of_state_legislature))), qualified(T, civil_office).
 
-qualified([H|T],military_office) :- (not(qualified([H|T1], member_congress));
-                    not(qualified([H|T2], office_of_US));
-                    not(qualified([H|T3], member_congress));
-                    not(qualified([H|T4], member_of_state_legislature))), qualified(T, military_office).
+qualified(H,military_office) :- (not(qualified(H, member_congress));
+                    not(qualified(H, office_of_US));
+                    not(qualified(H, member_congress));
+                    not(qualified(H, member_of_state_legislature))), qualified(T, military_office).
 
 supportConstitution(X) :- (not(rebel(X, against_constitution)); not(aid(X,enemies))), qualified([X|T], Y),
                            (Y = senate; Y = representative_in_congress;
@@ -1167,7 +1189,7 @@ power(congress,enforce(amendment_23)).
 amendmentpassed(24,27, 8, 1962).
 amendmentapproved(24, 23, 1, 1964).
 
-right(citizen, vote(election)).
+right(X, vote(election)) :- citizen(X,Y).
 
 % ----------------------------------------------
 
