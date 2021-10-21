@@ -139,6 +139,18 @@ power(president, "convene both Houses").
 
 removedFromOffice(member(X, [president, vice_president, "all civil Officers"]), Reason):- member(Reason, ["Treason", "Bribery", "high crimes"]). 
 
+%Article 6
+debtsvalid(confederation).
+lawOfTheLand(constitution).
+boundBy(judges, lawOfTheLand(constitution)).
+boundBy(senator, oath(constitution)).
+boundBy(executive, oath(constitution)).
+boundBy(legislature, oath(constitution)).
+boundBy(judges, oath(constitution)).
+
+%Amendment 11 
+
+
 %Amendment 21
 
 %section 1
