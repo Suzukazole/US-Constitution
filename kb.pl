@@ -1021,12 +1021,15 @@ power(congress, enforce(amendment15)).
 
 % ----------------------------------------------
 
-% AMENDMENT 16 Section 1
+% AMENDMENT 16
+
 amendmentpassed(13,2,7,1909).
 amendementapproved(13,3,2,1913).
 
 power(congress,lay(taxes_on_income)).
 power(congress,collect(taxes_on_income)).
+
+% ----------------------------------------------
 
 % AMENDMENT 19
 
@@ -1086,6 +1089,8 @@ amendmentOperative(20, toConstitution, passed(legislatureOf(stateOfUS(X), A), Y)
 % ----------------------------------------------
 
 % AMENDMENT 22 Section 1
+
+% Functors used
 % notElected/2 Y is a the president in power and X is the president who has been elected.
 amendmentpassed(22,21,3,1947).
 amendementapproved(22,27,2,1951).
@@ -1093,16 +1098,24 @@ notElected(president,more_than_twice);
 notheldoffice(Y,president,Z):- president(X),Z>2.
 notheldoffice(Y,acting_president,Z):- president(X),Z>2.
 
+% ----------------------------------------------
+
 % AMENDMENT 22 Section 2
 operative(amendment_22) :- ratifiedYears(X,Y),X<7,Y>0.75.
+
+% ----------------------------------------------
 
 % AMENDMENT 23 Section 1
 amendmentpassed(23,16,6,1960).
 amendementapproved(23,29,3,1961).
 power(congress,appoint(districtconstitutingseatofgovernment)).
 
+% ----------------------------------------------
+
 % AMENDMENT 23 Section 2
 power(congress,enforce(amendement_23)).
+
+% ----------------------------------------------
 
 % AMENDMENT 24 Section 1
 
