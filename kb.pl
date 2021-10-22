@@ -65,10 +65,11 @@ consist(congress,houseOfRepresentatives).
 
 executivePower(president).
 term(president,4).
-term(vice_president,4).
+term(vicePresident,4).
 
-officeOfTrust(ash).
-officeOfProfit(bsh).
+officeOfTrust(ash). %test cases for notElector.
+officeOfProfit(bsh). %test cases for notElector.
+
 notElector(Person) :- officeOfTrust(Person).
 notElector(Person) :- officeOfProfit(Person).
 
@@ -90,10 +91,28 @@ notElector(Person) :- officeOfProfit(Person).
 
 
 % Amendment 12
-votes(elector, "President").
-votes(elector, "Vice president").
-maxPresidentVotes(Person, "President").
-maxVicePresidentVotes(Person, "Vice president").
+
+% votes/2 defines who the elector can vote for(president, vice president).
+% state/2 defines the state of the first argument in the second argument.
+% statecmp/2 is true if the state of the first argument equals the state of the second argument.
+% notElector/1 is true if the person is from same state as either the president or the vice president. 
+
+votes(elector, president).
+votes(elector, vicePresident).
+
+state(elector1, michigan). %test cases for notElector
+state(elector2, massachusetts). %test cases for notElector
+state(elector3, california). %test cases for notElector
+state(president, massachusetts). %test cases for notElector
+state(vicePresident, california). %test cases for notElector
+
+stateCmp(X, president):- state(president, S1), state(X, S2), S1 = S2.
+stateCmp(X, vicePresident):- state(vicePresident, S1), state(X, S2), S1 = S2.
+notElector(Person) :- stateCmp(Person, president).
+notElector(Person) :- stateCmp(Person, vicePresident).
+
+maxPresidentVotes(Person, president).
+maxVicePresidentVotes(Person, vicePresident).
 eligible_for_vicePresident(Person):- eligible_for_president(Person).
 
 % Amendment 20 section 3
