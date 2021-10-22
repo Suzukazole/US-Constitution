@@ -41,6 +41,7 @@ ID: 2019B5A70650P
 :- discontiguous members/1.
 :- discontiguous successfulImpeachement/1.
 :- discontiguous crime/2.
+:- discontiguous bill_passed/2.
 
 age(rohan, 23).
 citizen(rohan, 23).
@@ -77,7 +78,7 @@ monday(2, 12, 2019).
 % composed/3 holds if the bodies in the second and third arguments are contained in the first
 % populationOfUS/1 states the population of US
 
-populationOfUS(1000000000). %Fact to use further
+populationOfUS(10). %Fact to use further
 consist(congress,senate).
 consist(congress,houseOfRepresentatives).
 legislativePower(congress).
@@ -85,7 +86,7 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 
 % ----------------------------------------------
 
-%ARTICLE 1 Section 2
+% ARTICLE 1 Section 2
 
 % Functors used:
 % elected/4 says X who is inhabitant of the state Y is elected by third argument to the state Z
@@ -108,9 +109,20 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 % denied/2 holds if the right in first argument is denied on account of second argument
 % notdenied/2 holds if the right in first argument can't be denied on account of second argument
 
+age(george, 50). %Fact added to test right/2 and other functors
+citizen(george, 45). %Fact added to test right/2 and other functors
+age(raghu, 45). %Fact added to test right/2 and other functors
+citizen(raghu, 45). %Fact added to test right/2 and other functors
+age(katie, 30). %Fact added to test right/2 and other functors
+citizen(katie, 20). %Fact added to test right/2 and other functors
+age(emma, 20). %Fact added to test right/2 and other functors
+citizen(emma, 5). %Fact added to test right/2 and other functors
+age(sundar, 45). %Fact added to test right/2 and other functors
+citizen(sundar, 40). %Fact added to test right/2 and other functors
 elected(david, massachusetts, people, massachusetts). % Fact added to test elected/4
 elected(leonard, connecticut, people, connecticut). % Fact added to test elected/4
 elected(meera, newJersey, people, newYork). % Fact added to test elected/4
+elected(george, delaware, people, delware). % Fact added to test elected/4
 age_qualified_HOR(H) :- age(H,X), X >=25.
 citizen_qualified_HOR(H) :- citizen(H,Y), Y >=7.
 state_qualified_HOR(H,X) :- stateOfUS(X), elected(H,X,people,X).
@@ -122,38 +134,44 @@ consist(houseOfRepresentatives, members(X)).
 term(members(X),2).
 
 % Changes due to Amendment 14 Section 2
+sum([H|T], A, S) :- A = A1 + H, sum(T, A1, S).
+sum([], A, A).
 
-sum([No_of_FreePersons, No_of_Indians_not_taxed], 0, CountOfRepresentatives).
+% sum([No_of_FreePersons, No_of_Indians_not_taxed], 0, CountOfRepresentatives) is the template of this functor
+sum([8, 1], 0, CountOfRepresentatives).
 
 right(A,B).
 
 % Changes due to Amendment 26 Section 1
 notdenied(right(Y, vote_elect(X)), on_account_of_age) :- citizen(Y,Z), age(Y, Age), Age >= 18.
 
-age(george, 50). %Fact added to test right/2 and other functors
-citizen(george, 45). %Fact added to test right/2 and other functors
 male(rohan). %Fact added to test right/2 and other functors
 male(david). %Fact added to test right/2 and other functors
 male(leonard). %Fact added to test right/2 and other functors
 male(george). %Fact added to test right/2 and other functors
+male(raghu). %Fact added to test right/2 and other functors
+male(sundar). %Fact added to test right/2 and other functors
 female(X) :- \+male(X).
 
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(elector_for_President)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(elector_for_Vice_President)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(representative_in_congress)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(executive_officers)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(judicial_officers)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(members_of_legislature)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(X, vote_elect(members_of_legislature)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
+% sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, CountOfRepresentatives) is the template of this functor
+% [rohan, david, leonard, george, raghu, sundar] is list of males above 18
+% [leonard, george, raghu] is list of males above 18 and denied vote due to any reason
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(elector_for_President)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(elector_for_Vice_President)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(representative_in_congress)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(executive_officers)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(judicial_officers)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(members_of_legislature)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(members_of_legislature)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
 
 stateOfUS(rhodeisland). %Fact added to be used further
 meetingOfCongress(04, 07, 1861). %Fact added to test enum_done/1 and other fns
 meetingOfCongress(02, 12, 1861). %Fact added to test enum_done/1 and other fns
 meetingOfCongress(07, 12, 1863). %Fact added to test enum_done/1 and other fns
 meetingOfCongress(05, 12, 1864). %Fact added to test enum_done/1 and other fns
+meetingOfCongress(03, 01, 2019). %Fact added to test enum_done/1 and other fns
 enum_done(1862).
-% enum_done(X) :-  >=(Y, -(X,10)), enum_done(Y).
 enum_done(X) :- meetingOfCongress(D, M, Year), X >= Year, =<(X, +(Year,3)).
 total([H|T], A, N) :- total(T, A-1, N).
 total([],A,A). 
@@ -173,6 +191,7 @@ until_enum_representatives(stateOfUS(southCarolina), 5).
 until_enum_representatives(stateOfUS(georgia), 3).
 
 power(executive_authority, issueWritsOfElection) :- num_representatives(stateOfUS(X), Y), Y = 0.
+impeachement(david).
 power(houseOfRepresentatives, impeachment(X)).
 choose(houseOfRepresentatives, speaker).
 choose(houseOfRepresentatives, officers).
@@ -260,11 +279,11 @@ successfulImpeachement(senator(X)) :-
     disqualification(X),
     noTrust(X); noProfit(X).
 
-party(republicans).% Fact added to test party/1
-indictment(republicans).% Fact added to test indictment/1
-trial(republicans).% Fact added to test trial/1
-judgment(republicans).% Fact added to test judgment/1
-punishment(republicans).% Fact added to test punishment/1
+party(republicans). % Fact added to test party/1
+indictment(republicans). % Fact added to test indictment/1
+trial(republicans). % Fact added to test trial/1
+judgment(republicans). % Fact added to test judgment/1
+punishment(republicans). % Fact added to test punishment/1
 
 successfulImpeachement(party(X)) :-
     indictment(X),
@@ -422,10 +441,8 @@ power(congress, pay(debts)).
 power(congress, provide(common_defence)).
 power(congress, provide(general_welfare)).
 
-% Check this once
 power(congress, borrow(money_on_credit_of_US)).
 
-% Check this once
 power(congress, regulate(commerce_with_foreign_nations)).
 power(congress, regulate(commerce_among_states)).
 power(congress, regulate(commerce_with_indian_tribes)).
@@ -455,7 +472,7 @@ power(congress, punish(felonies_on_high_seas)).
 power(congress, define(offense_against_laws)).
 power(congress, punish(offense_against_laws)).
 
-power(congress, declare(war(X,Y))).
+power(congress, declare(war(X,Y))) :- X = stateOfUS(X1), stateOfUS(X1), Y = stateOfUS(X2), stateOfUS(X2),  X2 \= X1.
 power(congress, grant(letter_of_marque)).
 power(congress, grant(letter_of_reprisal)).
 power(congress, make_rules(caputures_on_land_and_water)).
@@ -478,9 +495,11 @@ power(congress, provide(organinizing_militia)).
 power(congress, provide(arming_militia)).
 power(congress, provide(diciplining_militia)).
 
-district(X) :- area(X, A), =<(X,10).
-power(congress, exerciseLegislation(district(X))).
-% Yet to finish
+area(connecticut_first, 5).
+area(georgia_first, 10).
+area(massachusetts_first, 20).
+district(X) :- area(X, A), =<(A,10).
+power(congress, exerciseLegislation(Y)) :- Y = district(X), district(X).
 
 power(congress, makelaws(execute_foregoing_powers)).
 power(congress, makelaws(power_vested_in_government)).
@@ -950,6 +969,7 @@ jury(trialOfCrimes(X), foreignState(Y)) :- X =\= impeachement .
 % ----------------------------------------------
 
 % AMENDMENT 13 Section 1
+
 % Functors used
 % punishment/2 the first is the person's name who has to face the slavery if he is convicted of a crime else no one should be made to face slavery.
 
@@ -963,6 +983,10 @@ punishment(X,involuntary_servitude) :- crime(X,convicted).
 % ----------------------------------------------
 
 % AMENDMENT 13 Section 2
+
+amendmentpassed(13,31,1,1865).
+amendmentapproved(13,6,12,1865).
+
 enforce(article_by_appropriate_legislation).
 power(congress,enforce(article_by_appropriate_legislation)).
 
@@ -1012,23 +1036,25 @@ deprive(X, citizen(A,B), equal_protection_of_law) :- stateOfUS(X), process_of_la
 amendmentpassed(14, 13, 06, 1866). % Amendment 14 was passed on 13th June 1866
 amendmentapproved(14, 09, 07, 1868). % Amendment 14 was approved on 9th July 1868
 
-sum([H|T], A, S) :- A = A1 + H, sum(T, A1, S).
-sum([], A, A).
-
-sum([No_of_FreePersons, No_of_Indians_not_taxed], 0, CountOfRepresentatives).
+% sum([No_of_FreePersons, No_of_Indians_not_taxed], 0, CountOfRepresentatives) is the template of this functor
+sum([8, 1], 0, CountOfRepresentatives).
 
 right(A,B).
 
 % Changes due to Amendment 26 Section 1
 notdenied(right(Y, vote_elect(X)), on_account_of_age) :- citizen(Y,_), age(Y, Age), Age >= 18.
 
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, elector_for_Vice_President)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, elector_for_President)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, representative_in_congress)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, executive_officers)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, judicial_officers)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), denied(right(vote_elect(X, members_of_legislature)), Y).
-sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, ReducedCountOfRepresentatives) :- length(Males_above_18_denied_vote, A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
+% sum([No_of_FreePersons, No_of_Indians_not_taxed, -(0, /(A, Males_above_18))], 0, CountOfRepresentatives) is the template of this functor
+% [rohan, david, leonard, george, raghu, sundar] is list of males above 18
+% [leonard, george, raghu] is list of males above 18 and denied vote due to any reason
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(elector_for_President)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(elector_for_Vice_President)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(representative_in_congress)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(executive_officers)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(judicial_officers)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(members_of_legislature)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), denied(right(X, vote_elect(members_of_legislature)), _).
+sum([8,  1, -(0, /(A, 6))], 0, ReducedCountOfRepresentatives) :- length([leonard, george, raghu], A), male(X), abridges_immunities(X,Y), abridges_privelegies(X,Y), Y = true.
 
 % ----------------------------------------------
 
@@ -1311,3 +1337,222 @@ amendmentapproved(26, 01, 07, 1971). % Amendment 26 was approved on 1st July 197
 power(congress,enforce(amendment26)).
 
 % ----------------------------------------------
+
+% Article 2
+% Section 1
+
+% executivePower/1 defines which body has executive power.
+% term/2 defines the term of the first argument in the second argument.
+% officeOfTrust/1 indicates if the person holds an office of trust.
+% officeOfProfit/1 indicates if the person holds an office of profit. 
+% notElector/1 is true if the person is not eligible for being an elector.
+
+executivePower(president).
+term(president,4).
+term(vicePresident,4).
+
+officeOfTrust(ash).     %test cases for notElector.
+officeOfProfit(bsh).    %test cases for notElector.
+
+notElector(Person) :- officeOfTrust(Person).
+notElector(Person) :- officeOfProfit(Person).
+
+% Amendment 12 [CHECK]
+
+% votes/2 defines who the elector can vote for(president, vice president).
+% state/2 defines the state of the first argument in the second argument.
+% statecmp/2 is true if the state of the first argument equals the state of the second argument.
+% notElector/1 is true if the person is from same state as either the president or the vice president. 
+% presidentVotes/2 defines how many votes a person has got for the office of president.
+% vicePresidentVotes/2 defines how many votes a person has got for the office of vice president.
+% maxPresidentVotes/1 is true if the person has the maximum votes for the office of president.
+% maxVicePresidentVotes/1 is true if the person has the maximum votes for the office of vice president.
+% isPresident/1 is  ture if the person is the president.
+% isVicePresident/1 is true if the person is the vice president.
+% eligible_for_vicePresident/1 is true if the person is eligible for president.
+% timeOfElection/1 defines who can determine the time of election.
+% citizenEligible/1 is true if the person is an eligible citizen.
+% ageEligible/1 is true if the person is eligible by age.
+% compensation/1 defines that the body has a fixed compensation.
+% oathPresident/1 defines the oath of the president.
+
+votes(elector, president).
+votes(elector, vicePresident).
+
+state(elector1, michigan).          % test cases for notElector
+state(elector2, massachusetts).     % test cases for notElector
+state(elector3, california).        % test cases for notElector
+state(president, massachusetts).    % test cases for notElector
+state(vicePresident, california).   % test cases for notElector
+
+stateCmp(X, president):- state(president, S1), state(X, S2), S1 = S2.
+stateCmp(X, vicePresident):- state(vicePresident, S1), state(X, S2), S1 = S2.
+notElector(Person) :- stateCmp(Person, president).
+notElector(Person) :- stateCmp(Person, vicePresident).
+
+presidentVotes(person1, 50).        % test cases for isPresident
+presidentVotes(person2, 60).        % test cases for isPresident
+vicePresidentVotes(person3, 70).    % test cases for isVicePresident
+vicePresidentVotes(person4, 60).    % test cases for isVicePresident
+
+maxPresidentVotes(Person) :- 
+    presidentVotes(Person, X),
+    presidentVotes(_, Y),
+    X > Y.
+
+maxVicePresidentVotes(Person) :- 
+    vicePresidentVotes(Person, X),
+    vicePresidentVotes(_, Y),
+    X > Y.
+
+isPresident(Person) :- maxPresidentVotes(Person).
+isVicePresident(Person) :- maxVicePresidentVotes(Person). 
+
+eligible_for_vicePresident(Person) :- eligible_for_president(Person).
+
+% Amendment 20
+% Section 3 [TODO]
+
+
+timeOfElection(congress).
+
+citizenEligible(Person) :-
+    citizen(Person, Y),
+    Y>=14.
+ageEligible(Person) :-
+    age(Person, Y),
+    Y>= 35.
+
+eligible_for_president(Person) :-
+    citizenEligible(Person),
+    ageEligible(Person).
+
+% Amendment 25.
+% newPresident/1 defines who the next president is.
+% nominate/1 defines when the vice president will be nominated.
+% actingPresident/1 defines when vice president becomes the acting president.
+
+% test facts for Amendment 25
+removedFromOffice(president).       % if the president is removed from office.
+death(president).                   % if the president dies.
+resignation(president).             % if the president resigns.
+vacancies(vicePresident).           % if there are vacancies for vice president office.
+congressConsent(true).              % if the congress consents.
+
+% written declarations of various bodies.
+%% instructions: comment out any of the declarations to test under what conditions the vice president is appointed as an acting President.
+
+writtenDeclaration(president, "unable to discharge the powers and duties of his office").
+writtenDeclaration(vicePresident, "president is unable to discharge the powers and duties of his office").
+writtenDeclaration(executive, "president is unable to discharge the powers and duties of his office").
+
+%section 1
+newPresident(vicePresident) :-
+    removedFromOffice(president);
+    death(president);
+    resignation(president).
+
+%section 2 
+nominate(vicePresident) :-
+    vacancies(vicePresident),
+    congressConsent(true).
+
+%section 3
+actingPresident(vicePresident):-
+    writtenDeclaration(president, _).
+
+%section 4
+actingPresident(vicePresident):-
+    writtenDeclaration(vicePresident, _),
+    writtenDeclaration(executive, _).
+
+compensation(president).
+oathPresident("I do solemnly swear (or affirm) that I will faithfully execute the Office of President of the United States, and will to the best of my Ability, preserve, protect and defend the Constitution of the United States").
+
+% Section 2 (Article 2)
+
+% senatorsConsent/2 tells if the senators consent or not to the statement in the first argument.
+% commanderInChiefOfArmy/1 defines who the commander in chief of the army is.
+% commanderInChiefOfNavy/1 defines who the commander in chief of the navy is.
+% commanderInChiefOfMilitia/1 defines who the commander in chief of the militia is.
+
+
+senatorsConsent("to make Treaties", true).      % set 2nd argument as true if consent is obtained.
+commanderInChiefOfArmy(president).
+commanderInChiefOfNavy(president).
+commanderInChiefOfMilitia(president).
+
+isImpeachement(true).     % set as true if case of impeachement
+isRecess(true).           % set as true if recess of the senate.
+
+power(president, grant(reprieves)) :- isImpeachement(true).
+power(president, grant(pardon(offenseAgainstUS))) :- isImpeachement(true).
+power(president, "to make Treaties"):- senatorsConsent("to make Treaties", Consent), Consent=true.
+power(president, appoint(ambassadors)).
+power(president, appoint(publicMinisters)).
+power(president, appoint(consuls)).
+power(president, appoint(judges)).
+power(president, appoint("other offices of the United States")).
+power(president, fillVacancies) :- isRecess(true).
+
+% Section 3 (Article 2)
+% informationOfState/2 tells if the first argument passes information of the state to the second argument.
+% duty/2 lists the duty of the body in the second argument.
+% recieve/2 defines the support that the president recieves.
+
+ifDisagreement(true).       % set as true if both the houses are in disagreement.
+
+informationOfState(president, congress).
+power(president, "convene both Houses").
+power(president, adjourn("both Houses")) :- ifDisagreement(true).
+
+recieve(president, [ambassadors, publicMinisters]).
+
+duty(president, ensure("laws are faithfully executed")).
+duty(president, commission("other officers of the United States")).
+
+% Section 4 (Article 2)
+% convicted/2 defines what the body in the first argument is convicted of.
+% removedFromOffice/1 tells if the body can be removed from the office.
+
+%% convicted test cases, set the second argument of convicted 
+%% as: treason, bribery, highCrimes as appropriate.
+
+convicted(president, treason).          
+convicted(vicePresident, bribery).
+convicted(civilOfficers, highCrimes).
+
+removedFromOffice(president) :- isImpeachement(true), convicted(president, _).
+removedFromOffice(vicepPresident) :- isImpeachement(true), convicted(vicePresident, _).
+removedFromOffice(civilOfficers) :- isImpeachement(true), convicted(civilOfficers, _).
+
+% Article 6
+% debtsValid/1 defines that the previous debts of the confederate are still valid.
+% lawOfTheLand/1 defines that the constitution is to be followed as the law of the land.
+% boundBy/2 defines what oath the body in the first argument is bound by.
+
+debtsValid(confederation).
+lawOfTheLand(constitution).
+boundBy(judges, lawOfTheLand(constitution)).
+boundBy(senator, oath(constitution)).
+boundBy(executive, oath(constitution)).
+boundBy(legislature, oath(constitution)).
+boundBy(judges, oath(constitution)).
+
+% Amendment 11 
+noJudicialPower(federal, state).
+
+
+% Amendment 21
+
+% Section 1
+article(18, "repealed").
+
+% Section 2
+prohibitedInUS(violation("state liquour laws")).
+
+% Section 3 [CHECK]
+ammendmentInoperative(27):- ratifiedAmmendment(27).
+
+% Amendment 27 
+varyCompensation(senator, houseOfRepresentatives, nextElections).
