@@ -13,3 +13,12 @@ This is the repo for the course project in CS F214: Logic in Computer Science, F
 
 ## References
 - https://www.annenbergclassroom.org/constitution/
+
+## Authors
+
+| Name | ID |
+| --- | ----------- |
+| A Sudarshan |2019B4A70744P |
+| Ashwin Murali | 2019B2A70957P|
+| Hari Sankar | 2019B3A70564P|
+| Ruchir Kumbhare| 2019B5A70650P|
