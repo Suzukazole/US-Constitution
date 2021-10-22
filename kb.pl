@@ -161,18 +161,42 @@ eligible_for_president(Person) :-
 
 %Amendment 25.
 % newPresident/1 defines who the next president is.
+% nominate/1 defines when the vice president will be nominated.
+% actingPresident/1 defines when vice president becomes the acting president.
+
+% test facts for Amendment 25
+removedFromOffice(president).       % if the president is removed from office.
+death(president).                   % if the president dies.
+resignation(president).             % if the president resigns.
+vacancies(vicePresident).           % if there are vacancies for vice president office.
+congressConsent(true).              % if the congress consents.
+
+% written declarations of various bodies.
+%% instructions: comment out any of the declarations to test under what conditions the vice president is appointed as an acting President.
+
+writtenDeclaration(president, "unable to discharge the powers and duties of his office").
+writtenDeclaration(vicePresident, "president is unable to discharge the powers and duties of his office").
+writtenDeclaration(executive, "president is unable to discharge the powers and duties of his office").
+
 %section 1
-newPresident(vicePresident):- removedFromOffice(president); death(president); resignation(president).
+newPresident(vicePresident) :-
+    removedFromOffice(president);
+    death(president);
+    resignation(president).
 
 %section 2 
-nominate(vicePresident):- vacancies(vicePresident), congressConsent(true).
+nominate(vicePresident) :-
+    vacancies(vicePresident),
+    congressConsent(true).
 
 %section 3
-actingPresident(vicePresident):- writtenDeclaration(president, "unable to discharge the powers and duties of his office").
+actingPresident(vicePresident):-
+    writtenDeclaration(president, _).
 
 %section 4
-actingPresident(vicePresident):- writtenDeclaration(vicePresident, "president is unable to discharge the powers and duties of his office"), writtenDeclaration(executive, "president is unable to discharge the powers and duties of his office").
-
+actingPresident(vicePresident):-
+    writtenDeclaration(vicePresident, _),
+    writtenDeclaration(executive, _).
 
 compensation(president).
 oathPresident("I do solemnly swear (or affirm) that I will faithfully execute the Office of President of the United States, and will to the best of my Ability, preserve, protect and defend the Constitution of the United States").
