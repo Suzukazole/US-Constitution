@@ -106,6 +106,8 @@ notElector(Person) :- officeOfProfit(Person).
 % timeOfElection/1 defines who can determine the time of election.
 % citizenEligible/1 is true if the person is an eligible citizen.
 % ageEligible/1 is true if the person is eligible by age.
+% compensation/1 defines that the body has a fixed compensation.
+% oathPresident/1 defines the oath of the president.
 
 
 votes(elector, president).
@@ -159,7 +161,7 @@ eligible_for_president(Person) :-
     citizenEligible(Person),
     ageEligible(Person).
 
-%Amendment 25.
+% Amendment 25.
 % newPresident/1 defines who the next president is.
 % nominate/1 defines when the vice president will be nominated.
 % actingPresident/1 defines when vice president becomes the acting president.
@@ -203,23 +205,35 @@ oathPresident("I do solemnly swear (or affirm) that I will faithfully execute th
 
 % Section 2 (Article 2)
 
-senatorsConsent("to make Treaties", true). 
-commanderinchief(president, "Army", "Navy", "Militia").
-power(president, "Grant Reprieves").
-power(president, "Pardons for Offenses").
-power(president, "to make Treaties"):- senatorsConsent("to make Treaties", Consent), Consent=true.
-power(president, "appoint Ambassadors").
-power(president, "appoint public Ministers").
-power(president, "appoint consuls").
-power(president, "appoint Judges").
-power(president, "appoint other offices of the United States").
-power(president, "fill vacancies during recess").
+% senatorsConsent/2 tells if the senators consent or not to the statement in the first argument.
+% commanderInChiefOfArmy/1 defines who the commander in chief of the army is.
+% commanderInChiefOfNavy/1 defines who the commander in chief of the navy is.
+% commanderInChiefOfMilitia/1 defines who the commander in chief of the militia is.
 
-% Section 3
+
+senatorsConsent("to make Treaties", true). 
+commanderInChiefOfArmy(president).
+commanderInChiefOfNavy(president).
+commanderInChiefOfMilitia(president).
+
+isImpeachement(false).    % set as true if case of impeachement
+isRecess(true).           % set as true if recess of the senate.
+
+power(president, grant(reprieves)) :- isImpeachement(_).
+power(president, grant(pardon(offenseAgainstUS))) :- isImpeachement(_).
+power(president, "to make Treaties"):- senatorsConsent("to make Treaties", Consent), Consent=true.
+power(president, appoint(ambassadors)).
+power(president, appoint(publicMinisters)).
+power(president, appoint(consuls)).
+power(president, appoint(judges)).
+power(president, appoint("other offices of the United States")).
+power(president, fillVacancies) :- isRecess(_).
+
+% Section 3 (Article 2)
 informationofState(president, congress).
 power(president, "convene both Houses").
 
-%section 4
+%section 4 (Article 2)
 
 removedFromOffice(member(X, [president, vice_president, "all civil Officers"]), Reason):- member(Reason, ["Treason", "Bribery", "high crimes"]). 
 
