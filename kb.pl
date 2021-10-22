@@ -67,8 +67,8 @@ executivePower(president).
 term(president,4).
 term(vicePresident,4).
 
-officeOfTrust(ash). %test cases for notElector.
-officeOfProfit(bsh). %test cases for notElector.
+officeOfTrust(ash).     %test cases for notElector.
+officeOfProfit(bsh).    %test cases for notElector.
 
 notElector(Person) :- officeOfTrust(Person).
 notElector(Person) :- officeOfProfit(Person).
@@ -102,6 +102,10 @@ notElector(Person) :- officeOfProfit(Person).
 % maxVicePresidentVotes/1 is true if the person has the maximum votes for the office of vice president.
 % isPresident/1 is  ture if the person is the president.
 % isVicePresident/1 is true if the person is the vice president.
+% eligible_for_vicePresident/1 is true if the person is eligible for president.
+% timeOfElection/1 defines who can determine the time of election.
+% citizenEligible/1 is true if the person is an eligible citizen.
+% ageEligible/1 is true if the person is eligible by age.
 
 
 votes(elector, president).
@@ -123,25 +127,40 @@ presidentVotes(person2, 60).        % test cases for isPresident
 vicePresidentVotes(person3, 70).    % test cases for isVicePresident
 vicePresidentVotes(person4, 60).    % test cases for isVicePresident
 
-maxPresidentVotes(Person) :- presidentVotes(Person, X), presidentVotes(_, Y), X > Y. 
-maxVicePresidentVotes(Person) :- vicePresidentVotes(Person, X), vicePresidentVotes(_, Y), X > Y.
+maxPresidentVotes(Person) :- 
+    presidentVotes(Person, X),
+    presidentVotes(_, Y),
+    X > Y.
+
+maxVicePresidentVotes(Person) :- 
+    vicePresidentVotes(Person, X),
+    vicePresidentVotes(_, Y),
+    X > Y.
 
 isPresident(Person) :- maxPresidentVotes(Person).
 isVicePresident(Person) :- maxVicePresidentVotes(Person). 
 
-eligible_for_vicePresident(Person):- eligible_for_president(Person).
+eligible_for_vicePresident(Person) :- eligible_for_president(Person).
 
-% Amendment 20 section 3
+% Amendment 20
+% Section 3 
 
-citizenEligible(Person):- citizen(Person, Y), Y>=14.
-ageEligible(Person):- age(Person, Y), Y>= 35.
+
+timeOfElection(congress).
+
+citizenEligible(Person) :-
+    citizen(Person, Y),
+    Y>=14.
+ageEligible(Person) :-
+    age(Person, Y),
+    Y>= 35.
 
 eligible_for_president(Person) :-
     citizenEligible(Person),
     ageEligible(Person).
 
-
 %Amendment 25.
+% newPresident/1 defines who the next president is.
 %section 1
 newPresident(vicePresident):- removedFromOffice(president); death(president); resignation(president).
 
@@ -154,11 +173,11 @@ actingPresident(vicePresident):- writtenDeclaration(president, "unable to discha
 %section 4
 actingPresident(vicePresident):- writtenDeclaration(vicePresident, "president is unable to discharge the powers and duties of his office"), writtenDeclaration(executive, "president is unable to discharge the powers and duties of his office").
 
+
 compensation(president).
 oathPresident("I do solemnly swear (or affirm) that I will faithfully execute the Office of President of the United States, and will to the best of my Ability, preserve, protect and defend the Constitution of the United States").
 
-
-% Section 2 
+% Section 2 (Article 2)
 
 senatorsConsent("to make Treaties", true). 
 commanderinchief(president, "Army", "Navy", "Militia").
