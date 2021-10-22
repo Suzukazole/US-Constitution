@@ -643,6 +643,13 @@ attainerOfTreason(cannotWork(forfeiture)).
 
 % ARTICLE 4 Section 1
 
+% Functors used
+% faithandcredit/3 all states will respect each other's publicact,records and judicialproceedings
+% congressmannertoprove/1 set of rules decided by congress to prove acts,record,etc. 
+
+judicialproceeding(interfaithmarriageallowed).
+stateOfUS(delaware).
+stateOfUS(connecticut).
 faithandcredit(X,publicact(Z),Y):- stateOfUS(X),stateOfUS(Y).
 faithandcredit(X,records(Z),Y):- stateOfUS(X),stateOfUS(Y).
 faithandcredit(X,judicialproceeding(Z),Y):- stateOfUS(X),stateOfUS(Y).
@@ -654,14 +661,28 @@ congressmannertoprove(proceedings).
 
 % ARTICLE 4 Section 2
 
+% functors used 
+% privileges/1 name of person who will enjoy privileges
+% crime/2 X is the person name and Y is the state where he has commited crime
+% deliver/2 x is name of person and y is the state he will be forced to return
+% demand/1 executiveauthority must take permission
+
+citizen(hari,8).
+demand(executiveauthority(delaware)).
+found(ajay,connecticut).
 privileges(X) :-citizen(X,_).
 immunities(X) :-citizen(X,_).
 crime(X,Y) :- deliver(X,Y).
+executiveauthority(Y).
 deliver(X,Y) :- found(X,Z), demand(executiveauthority(Y)).
 
 % ----------------------------------------------
 
 % ARTICLE 4 Section 3
+
+% Functors used
+% statesformation/1 state's name
+% newstateconsentfromotherstateslegislatures/1 state's name which has to take consent
 
 power(congress,admit(newstatesintounion)).
 statesformation(X):-withinjurisdiction(X).
