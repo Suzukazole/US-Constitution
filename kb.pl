@@ -368,9 +368,23 @@ memberOfHouse(notAllowed(memberOfCivilOffice)).
 
 % ARTICLE 1 Section 7
 
+%Functors used
+%bill_to_law/1 contiains the name of law which has to passed
+%bill_passed/2 contains the people in power who have to pass the bill and the name of the bill.
+%order_passed/2 contains who passed it and name of the order.
+%resolution_passed/2 contains who passed it and name of the resolution.
+%vote_passed/2 contains who passed it and for what they voted.
+
+bill_passed(houseOfRepresentatives,job_for_everyone).
+bill_passed(senate,job_for_everyone).
+bill_passed(president,job_for_everyone).
+raise(revenue_bills).
+propose(amendments_bills).
+concor(amendments_bills).
 power(houseofRepresentatives, raise(revenue_bills)).
 power(senate, propose(amendments_bills)).
 power(senate, concor(amendments_bills)).
+order_approve(president,min_wage_to_everyone,7). 
 bill_to_law(X) :- bill_passed(houseOfRepresentatives,X), bill_passed(senate,X), bill_passed(president,X).
 bill_passed(president,X) :- bill_approve(president,X,Y), =<(Y,10). 
 bill_passed(president,X) :- bill_disapprove(president,X), bill_reconsider(houseOfRepresentatives,X,Y), bill_reconsider(senate,X,Y), Y>=0.66.
@@ -478,6 +492,14 @@ power(congress, makelaws(power_vested_in_government)).
 % ----------------------------------------------
 
 %ARTICLE 1 Section 9
+
+%functors used
+%migrationtostates/2 contains the name of the person and when he migrated
+%nopreferenceshallbegiven/1 contains name of port of us which will not be preffered over others.
+%acceptTitle/1 contains name of person who has to accept title but if he holds a officeofprofit in us he has to take consent of congress before accepting.
+
+stateOfUS(delaware).
+port(heisenberg, stateOfUS(delaware)).
 migrationtostates(Y, Year) :- prohibition(0,Y, Year), =<(Year, 1808), tax_imposed(Y,Tax_paid), Tax_paid =< 10.
 susensionofWritofHabeasCorpus(X) :- rebellion(Y).
 notpassed(X) :-  billofAttainder(X).
