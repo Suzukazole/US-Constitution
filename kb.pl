@@ -260,9 +260,12 @@ removedFromOffice(president) :- isImpeachement(true), convicted(president, _).
 removedFromOffice(vicepPresident) :- isImpeachement(true), convicted(vicePresident, _).
 removedFromOffice(civilOfficers) :- isImpeachement(true), convicted(civilOfficers, _).
 
+% Article 6
+% debtsValid/1 defines that the previous debts of the confederate are still valid.
+% lawOfTheLand/1 defines that the constitution is to be followed as the law of the land.
+% boundBy/2 defines what oath the body in the first argument is bound by.
 
-%Article 6
-debtsvalid(confederation).
+debtsValid(confederation).
 lawOfTheLand(constitution).
 boundBy(judges, lawOfTheLand(constitution)).
 boundBy(senator, oath(constitution)).
@@ -270,20 +273,20 @@ boundBy(executive, oath(constitution)).
 boundBy(legislature, oath(constitution)).
 boundBy(judges, oath(constitution)).
 
-%Amendment 11 
+% Amendment 11 
 noJudicialPower(federal, state).
 
 
-%Amendment 21
+% Amendment 21
 
-%section 1
+% Section 1
 article(18, "repealed").
 
-%section 2
+% Section 2
 prohibitedInUS(violation("state liquour laws")).
 
-%section 3
+% Sction 3
 ammendmentInoperative(27):- ratifiedAmmendment(27).
 
-%amendment 27 
+% Amendment 27 
 varyCompensation(senator, houseOfRepresentatives, nextElections).
