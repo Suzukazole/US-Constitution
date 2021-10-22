@@ -96,23 +96,39 @@ notElector(Person) :- officeOfProfit(Person).
 % state/2 defines the state of the first argument in the second argument.
 % statecmp/2 is true if the state of the first argument equals the state of the second argument.
 % notElector/1 is true if the person is from same state as either the president or the vice president. 
+% presidentVotes/2 defines how many votes a person has got for the office of president.
+% vicePresidentVotes/2 defines how many votes a person has got for the office of vice president.
+% maxPresidentVotes/1 is true if the person has the maximum votes for the office of president.
+% maxVicePresidentVotes/1 is true if the person has the maximum votes for the office of vice president.
+% isPresident/1 is  ture if the person is the president.
+% isVicePresident/1 is true if the person is the vice president.
+
 
 votes(elector, president).
 votes(elector, vicePresident).
 
-state(elector1, michigan). %test cases for notElector
-state(elector2, massachusetts). %test cases for notElector
-state(elector3, california). %test cases for notElector
-state(president, massachusetts). %test cases for notElector
-state(vicePresident, california). %test cases for notElector
+state(elector1, michigan).          % test cases for notElector
+state(elector2, massachusetts).     % test cases for notElector
+state(elector3, california).        % test cases for notElector
+state(president, massachusetts).    % test cases for notElector
+state(vicePresident, california).   % test cases for notElector
 
 stateCmp(X, president):- state(president, S1), state(X, S2), S1 = S2.
 stateCmp(X, vicePresident):- state(vicePresident, S1), state(X, S2), S1 = S2.
 notElector(Person) :- stateCmp(Person, president).
 notElector(Person) :- stateCmp(Person, vicePresident).
 
-maxPresidentVotes(Person, president).
-maxVicePresidentVotes(Person, vicePresident).
+presidentVotes(person1, 50).        % test cases for isPresident
+presidentVotes(person2, 60).        % test cases for isPresident
+vicePresidentVotes(person3, 70).    % test cases for isVicePresident
+vicePresidentVotes(person4, 60).    % test cases for isVicePresident
+
+maxPresidentVotes(Person) :- presidentVotes(Person, X), presidentVotes(_, Y), X > Y. 
+maxVicePresidentVotes(Person) :- vicePresidentVotes(Person, X), vicePresidentVotes(_, Y), X > Y.
+
+isPresident(Person) :- maxPresidentVotes(Person).
+isVicePresident(Person) :- maxVicePresidentVotes(Person). 
+
 eligible_for_vicePresident(Person):- eligible_for_president(Person).
 
 % Amendment 20 section 3
