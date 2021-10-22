@@ -122,7 +122,7 @@ citizen(sundar, 40). %Fact added to test right/2 and other functors
 elected(david, massachusetts, people, massachusetts). % Fact added to test elected/4
 elected(leonard, connecticut, people, connecticut). % Fact added to test elected/4
 elected(meera, newJersey, people, newYork). % Fact added to test elected/4
-elected(george, delaware, people, delware). % Fact added to test elected/4
+elected(george, delaware, people, delaware). % Fact added to test elected/4
 age_qualified_HOR(H) :- age(H,X), X >=25.
 citizen_qualified_HOR(H) :- citizen(H,Y), Y >=7.
 state_qualified_HOR(H,X) :- stateOfUS(X), elected(H,X,people,X).
@@ -219,7 +219,7 @@ choose(houseOfRepresentatives, officers).
 % state_qualified_Senator/2 holds if first argument is elected by the people to the same state (fourth argument) the person lives in(second argument)
 %  qualified_Senator/1 has the names of those in first argument who are qualified for an election/appointment for the position in second argument
 % vPOTUS/1 specifies vice president of the US 
-% votingVPOTUS/1 specifies the voting power of the vice president
+% votingpower_vicePresident/1 specifies the voting power of the vice president
 % otherOfficers/1 votes of other officers when required
 % powerOfImpeachement/3 conditions required for an impeachement to take place
 % trialOfPOTUS/2 conditions required for a trial of the president of the US
@@ -259,8 +259,8 @@ qualified_Senator([S,X,Y,Z]) :-
     citizen_qualified_Senator(S,Y),
     state_qualified_Senator(S,Z).
 
-vPOTUS(presidentOf(senate)).
-votingVPOTUS(equalHouse).
+presidentOfSenate(vicePresident).
+votingpower_vicePresident(equalHouse).
 
 otherOfficers(absenceOf(vPOTUS); officeOFTPOTUS(vPOTUS)).
 presidentProTempore(absenceOf(vPOTUS)).
@@ -1210,6 +1210,62 @@ jury(trialOfCrimes(X), foreignState(Y)) :- X =\= impeachement .
 
 % ----------------------------------------------
 
+% Amendment 12 [CHECK]
+
+% Functors used
+% votes/2 defines who the elector can vote for(president, vice president).
+% state/2 defines the state of the first argument in the second argument.
+% statecmp/2 is true if the state of the first argument equals the state of the second argument.
+% notElector/1 is true if the person is from same state as either the president or the vice president. 
+% presidentVotes/2 defines how many votes a person has got for the office of president.
+% vicePresidentVotes/2 defines how many votes a person has got for the office of vice president.
+% maxPresidentVotes/1 is true if the person has the maximum votes for the office of president.
+% maxVicePresidentVotes/1 is true if the person has the maximum votes for the office of vice president.
+% isPresident/1 is  ture if the person is the president.
+% isVicePresident/1 is true if the person is the vice president.
+% eligible_for_vicePresident/1 is true if the person is eligible for president.
+% timeOfElection/1 defines who can determine the time of election.
+% citizenEligible/1 is true if the person is an eligible citizen.
+% ageEligible/1 is true if the person is eligible by age.
+% compensation/1 defines that the body has a fixed compensation.
+% oathPresident/1 defines the oath of the president.
+
+votes(elector, president).
+votes(elector, vicePresident).
+
+state(elector1, michigan).          % test cases for notElector
+state(elector2, massachusetts).     % test cases for notElector
+state(elector3, california).        % test cases for notElector
+state(president, massachusetts).    % test cases for notElector
+state(vicePresident, california).   % test cases for notElector
+
+stateCmp(X, president):- state(president, S1), state(X, S2), S1 = S2.
+stateCmp(X, vicePresident):- state(vicePresident, S1), state(X, S2), S1 = S2.
+notElector(Person) :- stateCmp(Person, president).
+notElector(Person) :- stateCmp(Person, vicePresident).
+
+presidentVotes(person1, 50).        % test cases for isPresident
+presidentVotes(person2, 60).        % test cases for isPresident
+vicePresidentVotes(person3, 70).    % test cases for isVicePresident
+vicePresidentVotes(person4, 60).    % test cases for isVicePresident
+
+maxPresidentVotes(Person) :- 
+    presidentVotes(Person, X),
+    presidentVotes(_, Y),
+    X > Y.
+
+maxVicePresidentVotes(Person) :- 
+    vicePresidentVotes(Person, X),
+    vicePresidentVotes(_, Y),
+    X > Y.
+
+isPresident(Person) :- maxPresidentVotes(Person).
+isVicePresident(Person) :- maxVicePresidentVotes(Person). 
+
+eligible_for_vicePresident(Person) :- eligible_for_president(Person).
+
+% ----------------------------------------------
+
 % AMENDMENT 13 Section 1
 
 % Functors used
@@ -1430,11 +1486,18 @@ power(congress,collect(taxes_on_income)).
 % ----------------------------------------------
 
 % AMENDMENT 17
+
 % vacancies(byResignation; recessOfLegislature).
 % tempArrang(executive, vacancies, nextMeetingOfLegislature).
 tempArrang(legislature, stateOfUS(Y)).
 vacancies(senate(state), executiveAuthority(issueWrits), tempArrang(X)).
 fillVacancies(legislature).
+
+% ----------------------------------------------
+
+% AMENDMENT 18
+
+% REPEALED BY AMENDMENT 21 SO SKIPPED
 
 % ----------------------------------------------
 
@@ -1535,12 +1598,12 @@ article(18, "repealed").
 %  AMENDMENT 21 Section 2
 
 % Functors used
-% prohibitedInUS/1 defines what is prohibited according to the laws.
+% prohibitedInUS/1 defines what is prohibited according to the laws
 
 prohibitedInUS(violation("state liquour laws")).
 
 % ----------------------------------------------
-% AMENDMENT 21 Section 3 
+% AMENDMENT 21 Section 3 [CHECK]
 
 % Functors used
 % ammendmentInoperative/1 defines which ammendment is inoperative.
@@ -1601,7 +1664,8 @@ power(congress, enforce(amendment(24))).
 
 % ----------------------------------------------
 
-% AMENDMENT 25.
+% AMENDMENT 25 Section 1.
+
 % newPresident/1 defines who the next president is.
 % nominate/1 defines when the vice president will be nominated.
 % actingPresident/1 defines when vice president becomes the acting president.
@@ -1629,16 +1693,24 @@ newPresident(vicePresident) :-
     death(president);
     resignation(president).
 
-%section 2 
+% ----------------------------------------------
+
+% AMENDMENT 25 Section 2 
+
 nominate(vicePresident) :-
     vacancies(vicePresident),
     congressConsent(true).
+% ----------------------------------------------
 
-%section 3
+% AMENDMENT 25 Section 3
+
 actingPresident(vicePresident):-
     writtenDeclaration(president, _).
 
-%section 4
+% ----------------------------------------------
+
+% AMENDMENT 25 Section 4
+
 actingPresident(vicePresident):-
     writtenDeclaration(vicePresident, _),
     writtenDeclaration(executive, _).
@@ -1682,5 +1754,4 @@ amendmentapproved(27, 07, 05, 1992).
 varyCompensation(senator, houseOfRepresentatives, nextElections).
 
 % ----------------------------------------------
-
-% END.
+% END
