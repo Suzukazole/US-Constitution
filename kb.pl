@@ -59,12 +59,18 @@ consist(congress,houseOfRepresentatives).
 
 % executivePower/1 defines which body has executive power.
 % term/2 defines the term of the first argument in the second argument.
+% officeOfTrust/1 indicates if the person holds an office of trust.
+% officeOfProfit/1 indicates if the person holds an office of profit. 
+% notElector/1 is true if the person is not eligible for being an elector.
 
 executivePower(president).
 term(president,4).
 term(vice_president,4).
 
-notElector(Person) :- senator(Person); representative(Person).
+officeOfTrust(ash).
+officeOfProfit(bsh).
+notElector(Person) :- officeOfTrust(Person).
+notElector(Person) :- officeOfProfit(Person).
 
 % elector(X,Y) = houseOfRepresentatives(X,Z),senator(X,A),Y=Z+A.
 % qualified([X|T],elector) :- post(X,Y), Y \=senator, Y\=representative, Y\=person_holding_office, Y\=person_earning_profit, qualified([X|T],elector).
