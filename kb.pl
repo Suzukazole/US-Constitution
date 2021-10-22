@@ -1,10 +1,13 @@
 /* 
 Name: A.Sudarshan
 ID: 2019B4A70744P
+
 Name: Ashwin Murali
 ID: 2019B2A70957P
+
 Name: Hari Sankar
 ID: 2019B3A70564P
+
 Name: Ruchir Kumbhare
 ID: 2019B5A70650P
 */
@@ -112,14 +115,6 @@ age_qualified_HOR(H) :- age(H,X), X >=25.
 citizen_qualified_HOR(H) :- citizen(H,Y), Y >=7.
 state_qualified_HOR(H,X) :- stateOfUS(X), elected(H,X,people,X).
 
-% rem_dup([H|T], A, List) :- member(H, A), rem_dup(T, A, List).
-% rem_dup([H|T], A1, List) :- \+member(H, A1),
-%                             append(A1, [H], A),
-%                             rem_dup(T, A, List).
-% rem_dup([], A, A).
-% set(X, Y) :- rem_dup(X, [], Y). 
-
-% qualified([], houseOfRepresentatives).
 qualified(H,houseOfRepresentatives) :- age_qualified_HOR(H), citizen_qualified_HOR(H), state_qualified_HOR(H,Q).
 
 members(X) :- qualified([X|T],houseOfRepresentatives); member(X,T).
@@ -157,8 +152,9 @@ meetingOfCongress(04, 07, 1861). %Fact added to test enum_done/1 and other fns
 meetingOfCongress(02, 12, 1861). %Fact added to test enum_done/1 and other fns
 meetingOfCongress(07, 12, 1863). %Fact added to test enum_done/1 and other fns
 meetingOfCongress(05, 12, 1864). %Fact added to test enum_done/1 and other fns
-% enum_done(1862).
-enum_done(X) :- meetingOfCongress(D, M, Year), X >= Year, =<(X, Year+3); (enum_done(Y), =<(X-Y, 10)).
+enum_done(1862).
+% enum_done(X) :-  >=(Y, -(X,10)), enum_done(Y).
+enum_done(X) :- meetingOfCongress(D, M, Year), X >= Year, =<(X, +(Year,3)).
 total([H|T], A, N) :- total(T, A-1, N).
 total([],A,A). 
 num_representatives(Y) :- Y = [H|T], H>=1, total(Y, 0, N), =<(N,*(/(1,30000)) , populationOfUS(X)).
@@ -804,10 +800,11 @@ right(soldier, timeOfWar(permissionOfOwner(quartaredInHouse))).
 
 amendmentapproved(4, 15, 12, 1791).
 
-secure(inTheirPersons).
-secure(inTheirHouses).
+
 secure(ofTheirPapers).
-right(Y, secure(X)) :- citizen(Y,Z).
+right(Y, secure(inTheirPersons)) :- citizen(Y,Z).
+right(Y, secure(ofTheirPapers)) :- citizen(Y,Z).
+right(Y, secure(inTheirHouses)) :- citizen(Y,Z).
 powerless(government, unreasonableSearchesAndSeizures).
 powerless(government, warrants).
 supportedBy(oaths).
@@ -823,10 +820,9 @@ havePower(government, warrants, supportedBy(X)).
 
 amendmentapproved(5, 15, 12, 1791).
 
-required(grandJury, seriousCriminalCharges).
-noTrial_inService(war).
-noTrial_inService(publicDanger).
-right(Y, noTrial_inService(X)) :- citizen(Y,Z).
+
+right(Y, noTrial_inService(war)) :- citizen(Y,Z).
+right(Y, noTrial_inService(publicDanger)) :- citizen(Y,Z).
 right(X, noTrial_sameOffence) :- citizen(X,Y).
 right(X, noTrial_againstSelfIncrimination) :- citizen(X,Y).
 right(X, witnessAgainstHimself) :- citizen(X,Y).
@@ -856,8 +852,7 @@ right(accused, assistanceOfDefenceCounsel).
 
 amendmentapproved(7, 15, 12, 1791).
 
-trialByJury_controversy(30).% Fact added to test controversy/1
-right(Y, trialByJury_controversy(X)) :- X > 20, citizen(Y,Z).
+right(Y, trialByJury_controversy(30)) :- citizen(Y,Z).
 
 % ----------------------------------------------
 
@@ -868,11 +863,10 @@ right(Y, trialByJury_controversy(X)) :- X > 20, citizen(Y,Z).
 
 amendmentapproved(8, 15, 12, 1791).
 
-notRequired(excessiveBail).
-notRequired(excessiveFines).
-notRequired(cruelPunishments).
-notRequired(unusualPunishmnets).
-right(Y, notRequired(X)) :- citizen(Y,Z).
+right(Y, notRequired(excessiveBail)) :- citizen(Y,Z).
+right(Y, notRequired(excessiveFines)) :- citizen(Y,Z).
+right(Y, notRequired(cruelPunishments)) :- citizen(Y,Z).
+right(Y, notRequired(unusualPunishmnets)) :- citizen(Y,Z).
 
 % ----------------------------------------------
 
