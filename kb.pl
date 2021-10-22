@@ -1557,7 +1557,7 @@ power(congress, enforce(amendment(24))).
 
 amendmentpassed(26, 23, 03, 1971). % Amendment 26 was passed on 23rd March 1971
 amendmentapproved(26, 01, 07, 1971). % Amendment 26 was approved on 1st July 1971
-notdenied(right(X, vote_elect(Y)), on_account_of_age) :- age(CitizenX,Age), Age>=18.
+notdenied(right(X, vote_elect(Y)), on_account_of_age) :- age(X,Age), Age>=18.
 
 % ----------------------------------------------
 
@@ -1580,3 +1580,5 @@ power(congress,enforce(amendment26)).
 % Functors used
 % varyCompensation/1 [TODO]
 varyCompensation(senator, houseOfRepresentatives, nextElections).
+
+% END.
