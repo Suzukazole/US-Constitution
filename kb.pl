@@ -42,6 +42,33 @@ ID: 2019B5A70650P
 :- discontiguous successfulImpeachement/1.
 :- discontiguous crime/2.
 :- discontiguous bill_passed/2.
+:- discontiguous term/2.
+:- discontiguous notElector/2.
+:- discontiguous notElector/1.
+:- discontiguous actingPresident/1.
+:- discontiguous removedFromOffice/1.
+:- discontiguous presidentVotes/2.
+:- discontiguous vicePresidentVotes/2.
+:- discontiguous compensation/1.
+:- discontiguous votes/2.
+:- discontiguous state/2.
+:- discontiguous stateCmp/2.
+:- discontiguous maxPresidentVotes/1.
+:- discontiguous maxVicePresidentVotes/1.
+:- discontiguous isPresident/1.
+:- discontiguous isVicePresident/1.
+:- discontiguous eligible_for_vicePresident/1.
+:- discontiguous notQualified/2.
+:- discontiguous notChosen/2.
+:- discontiguous actingPresident/1.
+:- discontiguous death/1.
+:- discontiguous resignation/1.
+:- discontiguous vacancies/1.
+:- discontiguous congressConsent/1.
+:- discontiguous writtenDeclaration/2.
+:- discontiguous newPresident/1.
+:- discontiguous nominate/1.
+
 
 age(rohan, 23).
 citizen(rohan, 23).
@@ -636,7 +663,7 @@ oathPresident("I do solemnly swear (or affirm) that I will faithfully execute th
 
 % ----------------------------------------------
 
-% AMENDMENT 12 [CHECK]
+% AMENDMENT 12
 
 % Functors used
 % votes/2 defines who the elector can vote for(president, vice president).
@@ -1199,18 +1226,15 @@ reservedTo(people).
 powerNotDelegatedtoUS(byConstitution, reservedTo(X)).
 
 % ----------------------------------------------
-% Amendment 11 [CHECK]
+% AMENDMENT 11 
 noJudicialPower(federal, state).
-
-
-% AMENDMENT 11
 
 jury(trialOfCrimes(X), stateOfUS(Y)) :- X =\= impeachement .
 jury(trialOfCrimes(X), foreignState(Y)) :- X =\= impeachement .
 
 % ----------------------------------------------
 
-% Amendment 12 [CHECK]
+% AMENDMENT 12 
 
 % Functors used
 % votes/2 defines who the elector can vote for(president, vice president).
@@ -1584,7 +1608,7 @@ amendmentOperative(20, toConstitution, passed(legislatureOf(stateOfUS(X), A), Y)
 
 % ----------------------------------------------
 
-% AMENDMENT 21  Section 1[TODO]
+% AMENDMENT 21  Section 1
 
 % Functors used
 % article/2 tells the status of the article given its number in the first argument.
@@ -1603,8 +1627,7 @@ article(18, "repealed").
 prohibitedInUS(violation("state liquour laws")).
 
 % ----------------------------------------------
-% AMENDMENT 21 Section 3 [CHECK]
-
+% AMENDMENT 21 Section 3 
 % Functors used
 % ammendmentInoperative/1 defines which ammendment is inoperative.
 
