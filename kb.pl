@@ -497,9 +497,15 @@ power(congress, makelaws(power_vested_in_government)).
 %migrationtostates/2 contains the name of the person and when he migrated
 %nopreferenceshallbegiven/1 contains name of port of us which will not be preffered over others.
 %acceptTitle/1 contains name of person who has to accept title but if he holds a officeofprofit in us he has to take consent of congress before accepting.
+%person/2 name of person and what office he holds
 
 stateOfUS(delaware).
+officeofProfit(us_Bank).
+person(hari, officeofProfit(us_Bank)).
+consentbycongresstoacceptTitle(hari).
 port(heisenberg, stateOfUS(delaware)).
+prohibition(0,kate, 1801).
+tax_imposed(kate,7).
 migrationtostates(Y, Year) :- prohibition(0,Y, Year), =<(Year, 1808), tax_imposed(Y,Tax_paid), Tax_paid =< 10.
 susensionofWritofHabeasCorpus(X) :- rebellion(Y).
 notpassed(X) :-  billofAttainder(X).
@@ -511,13 +517,14 @@ nordutyshallbetaken(Y) :- shipbound(Z), port(Y,stateOfUS(X)).
 nomoneydrawnfromtreasury(X) :- appropriationmadebylaw(X).
 publish(regularStatement).
 publish(accountoftheReceiptsandExpendituresofallpublicMoney).
+notitleofnobilitybyUS(hari).
 notitleofnobilitybyUS(Y).
-acceptOffice(X) :-person(officeofProfit(Y)),consentbycongresstoacceptoffice(X).
-acceptOffice(X) :-person(officeoftrust(Y)),consentbycongresstoacceptoffice(X).
-acceptTitle(X) :-person(officeofProfit(Y)),consentbycongresstoacceptTitle(X).
-acceptTitle(X) :-person(officeoftrust(Y)),consentbycongresstoacceptTitle(X).
-acceptEmolument(X) :-person(officeofProfit(Y)),consentbycongresstoacceptEmolument(X).
-acceptEmolument(X) :-person(officeoftrust(Y)),consentbycongresstoacceptEmolument(X).
+acceptOffice(X) :-person(X, officeofProfit(Y)),consentbycongresstoacceptoffice(X).
+acceptOffice(X) :-person(X, officeoftrust(Y)),consentbycongresstoacceptoffice(X).
+acceptTitle(X) :-person(X, officeofProfit(Y)),consentbycongresstoacceptTitle(X).
+acceptTitle(X) :-person(X, officeoftrust(Y)),consentbycongresstoacceptTitle(X).
+acceptEmolument(X) :-person(X, officeofProfit(Y)),consentbycongresstoacceptEmolument(X).
+acceptEmolument(X) :-person(X, officeoftrust(Y)),consentbycongresstoacceptEmolument(X).
 
 %__________________________________________________
 
@@ -672,10 +679,13 @@ power(congress,makeallneedfulRulesandRegulationsrespectingtheTerritoryorotherPro
 
 % ARTICLE 4 Section 4
 
+% Functors used
+% applicationforprotectionAgainstDomesticViolence/3 - firts predicate indicates who the stae has to approach for getting protection, Y is states name and 1 means it can be convened
+
 guaranteerepublicformofgovernment(X) :- stateOfUS(X).
 protectionAgainstInvasion(X) :-stateOfUS(X).
-protectionAgainstDomesticViolence(X) :- applicationforprotectionAgainstDomesticViolence(legislature,Y,1), stateOfUS(Y). 
-protectionAgainstDomesticViolence(X) :- applicationforprotectionAgainstDomesticViolence(executive,Y), stateOfUS(Y), applicationforprotectionAgainstDomesticViolence(legislature,Y,0).
+protectionAgainstDomesticViolence(Y) :- applicationforprotectionAgainstDomesticViolence(legislature,Y,0), stateOfUS(Y). 
+protectionAgainstDomesticViolence(Y) :- applicationforprotectionAgainstDomesticViolence(executive,Y,1), stateOfUS(Y), applicationforprotectionAgainstDomesticViolence(legislature,Y,0).
 
 %--------------------------------------------
 
