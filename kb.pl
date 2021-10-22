@@ -86,7 +86,7 @@ legislativePower(X) :- consist(Y,X), legislativePower(Y).
 
 % ----------------------------------------------
 
-%ARTICLE 1 Section 2
+% ARTICLE 1 Section 2
 
 % Functors used:
 % elected/4 says X who is inhabitant of the state Y is elected by third argument to the state Z
