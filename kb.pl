@@ -602,6 +602,11 @@ war(X, Y) :- stateOfUS(X), consentOfCongress(Congress), Consent = true, invaded(
 % officeOfTrust/1 indicates if the person holds an office of trust.
 % officeOfProfit/1 indicates if the person holds an office of profit. 
 % notElector/1 is true if the person is not eligible for being an elector.
+% timeOfElection/1 defines who can determine the time of election.
+% citizenEligible/1 is true if the person is an eligible citizen.
+% ageEligible/1 is true if the person is eligible by age.
+% compensation/1 defines that the body has a fixed compensation.
+% oathPresident/1 defines the oath of the president.
 
 executivePower(president).
 term(president,4).
@@ -612,6 +617,19 @@ officeOfProfit(sash).    %test cases for notElector.
 
 notElector(Person) :- officeOfTrust(Person).
 notElector(Person) :- officeOfProfit(Person).
+
+timeOfElection(congress).
+
+citizenEligible(Person) :-
+    citizen(Person, Y),
+    Y>=14.
+ageEligible(Person) :-
+    age(Person, Y),
+    Y>= 35.
+
+eligible_for_president(Person) :-
+    citizenEligible(Person),
+    ageEligible(Person).
 
 compensation(president).
 oathPresident("I do solemnly swear (or affirm) that I will faithfully execute the Office of President of the United States, and will to the best of my Ability, preserve, protect and defend the Constitution of the United States").
@@ -632,11 +650,6 @@ oathPresident("I do solemnly swear (or affirm) that I will faithfully execute th
 % isPresident/1 is  ture if the person is the president.
 % isVicePresident/1 is true if the person is the vice president.
 % eligible_for_vicePresident/1 is true if the person is eligible for president.
-% timeOfElection/1 defines who can determine the time of election.
-% citizenEligible/1 is true if the person is an eligible citizen.
-% ageEligible/1 is true if the person is eligible by age.
-% compensation/1 defines that the body has a fixed compensation.
-% oathPresident/1 defines the oath of the president.
 
 votes(elector, president).
 votes(elector, vicePresident).
@@ -691,18 +704,6 @@ actingPresident(providedByCongress) :-
     notQualified(president, true),
     notQualified(vicePresident, true).
 
-timeOfElection(congress).
-
-citizenEligible(Person) :-
-    citizen(Person, Y),
-    Y>=14.
-ageEligible(Person) :-
-    age(Person, Y),
-    Y>= 35.
-
-eligible_for_president(Person) :-
-    citizenEligible(Person),
-    ageEligible(Person).
 
 % ----------------------------------------------
 
@@ -1522,16 +1523,30 @@ amendmentOperative(20, toConstitution, passed(legislatureOf(stateOfUS(X), A), Y)
 
 % AMENDMENT 21  Section 1[TODO]
 
+% Functors used
+% article/2 tells the status of the article given its number in the first argument.
+ 
+amendmentpassed(21, 20, 02, 1933).
+amendmentapproved(21, 05, 12, 1933).
+
 article(18, "repealed").
 
 % ----------------------------------------------
 %  AMENDMENT 21 Section 2
+
+% Functors used
+% prohibitedInUS/1 defines what is prohibited according to the laws.
+
 prohibitedInUS(violation("state liquour laws")).
 
 % ----------------------------------------------
-% AMENDMENT 21 Section 3 [CHECK]
-ammendmentInoperative(27):- ratifiedAmmendment(27).
+% AMENDMENT 21 Section 3 
 
+% Functors used
+% ammendmentInoperative/1 defines which ammendment is inoperative.
+
+ratifiedAmmendment(27).      % fact per section 3
+ammendmentInoperative(X):- ratifiedAmmendment(X).
 
 % ----------------------------------------------
 
@@ -1590,6 +1605,9 @@ power(congress, enforce(amendment(24))).
 % newPresident/1 defines who the next president is.
 % nominate/1 defines when the vice president will be nominated.
 % actingPresident/1 defines when vice president becomes the acting president.
+
+amendmentpassed(25, 06, 07, 1965).
+amendmentapproved(25, 10, 02, 1967).
 
 % test facts for Amendment 25
 removedFromOffice(president).       % if the president is removed from office.
@@ -1657,7 +1675,12 @@ power(congress,enforce(amendment26)).
 % AMENDMENT 27 
 
 % Functors used
-% varyCompensation/1 [TODO]
+% varyCompensation/3 states that the bodies in the first and second argument can only vary their compensation for the next term.
+
+amendmentpassed(27, 25, 09, 1789).
+amendmentapproved(27, 07, 05, 1992).
 varyCompensation(senator, houseOfRepresentatives, nextElections).
+
+% ----------------------------------------------
 
 % END.
