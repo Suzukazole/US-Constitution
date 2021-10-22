@@ -211,31 +211,55 @@ oathPresident("I do solemnly swear (or affirm) that I will faithfully execute th
 % commanderInChiefOfMilitia/1 defines who the commander in chief of the militia is.
 
 
-senatorsConsent("to make Treaties", true). 
+senatorsConsent("to make Treaties", true).      % set 2nd argument as true if consent is obtained.
 commanderInChiefOfArmy(president).
 commanderInChiefOfNavy(president).
 commanderInChiefOfMilitia(president).
 
-isImpeachement(false).    % set as true if case of impeachement
+isImpeachement(true).     % set as true if case of impeachement
 isRecess(true).           % set as true if recess of the senate.
 
-power(president, grant(reprieves)) :- isImpeachement(_).
-power(president, grant(pardon(offenseAgainstUS))) :- isImpeachement(_).
+power(president, grant(reprieves)) :- isImpeachement(true).
+power(president, grant(pardon(offenseAgainstUS))) :- isImpeachement(true).
 power(president, "to make Treaties"):- senatorsConsent("to make Treaties", Consent), Consent=true.
 power(president, appoint(ambassadors)).
 power(president, appoint(publicMinisters)).
 power(president, appoint(consuls)).
 power(president, appoint(judges)).
 power(president, appoint("other offices of the United States")).
-power(president, fillVacancies) :- isRecess(_).
+power(president, fillVacancies) :- isRecess(true).
 
 % Section 3 (Article 2)
-informationofState(president, congress).
+% informationOfState/2 tells if the first argument passes information of the state to the second argument.
+% duty/2 lists the duty of the body in the second argument.
+% recieve/2 defines the support that the president recieves.
+
+ifDisagreement(true).       % set as true if both the houses are in disagreement.
+
+informationOfState(president, congress).
 power(president, "convene both Houses").
+power(president, adjourn("both Houses")) :- ifDisagreement(true).
 
-%section 4 (Article 2)
+recieve(president, [ambassadors, publicMinisters]).
 
-removedFromOffice(member(X, [president, vice_president, "all civil Officers"]), Reason):- member(Reason, ["Treason", "Bribery", "high crimes"]). 
+duty(president, ensure("laws are faithfully executed")).
+duty(president, commission("other officers of the United States")).
+
+% Section 4 (Article 2)
+% convicted/2 defines what the body in the first argument is convicted of.
+% removedFromOffice/1 tells if the body can be removed from the office.
+
+%% convicted test cases, set the second argument of convicted 
+%% as: treason, bribery, highCrimes as appropriate.
+
+convicted(president, treason).          
+convicted(vicePresident, bribery).
+convicted(civilOfficers, highCrimes).
+
+removedFromOffice(president) :- isImpeachement(true), convicted(president, _).
+removedFromOffice(vicepPresident) :- isImpeachement(true), convicted(vicePresident, _).
+removedFromOffice(civilOfficers) :- isImpeachement(true), convicted(civilOfficers, _).
+
 
 %Article 6
 debtsvalid(confederation).
