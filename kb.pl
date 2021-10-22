@@ -608,12 +608,17 @@ term(president,4).
 term(vicePresident,4).
 
 officeOfTrust(ash).     %test cases for notElector.
-officeOfProfit(bsh).    %test cases for notElector.
+officeOfProfit(sash).    %test cases for notElector.
 
 notElector(Person) :- officeOfTrust(Person).
 notElector(Person) :- officeOfProfit(Person).
 
-% Amendment 12 [CHECK]
+compensation(president).
+oathPresident("I do solemnly swear (or affirm) that I will faithfully execute the Office of President of the United States, and will to the best of my Ability, preserve, protect and defend the Constitution of the United States").
+
+% ----------------------------------------------
+
+% AMENDMENT 12 [CHECK]
 
 % Functors used
 % votes/2 defines who the elector can vote for(president, vice president).
@@ -636,11 +641,11 @@ notElector(Person) :- officeOfProfit(Person).
 votes(elector, president).
 votes(elector, vicePresident).
 
-state(elector1, michigan).          % test cases for notElector
-state(elector2, massachusetts).     % test cases for notElector
-state(elector3, california).        % test cases for notElector
-state(president, massachusetts).    % test cases for notElector
-state(vicePresident, california).   % test cases for notElector
+state(elector1, stateOfUS(michigan)).          % test cases for notElector
+state(elector2, stateOfUS(massachusetts)).     % test cases for notElector
+state(elector3, stateOfUS(california)).        % test cases for notElector
+state(president, stateOfUS(massachusetts)).    % test cases for notElector
+state(vicePresident, stateOfUS(california)).   % test cases for notElector
 
 stateCmp(X, president):- state(president, S1), state(X, S2), S1 = S2.
 stateCmp(X, vicePresident):- state(vicePresident, S1), state(X, S2), S1 = S2.
@@ -667,9 +672,24 @@ isVicePresident(Person) :- maxVicePresidentVotes(Person).
 
 eligible_for_vicePresident(Person) :- eligible_for_president(Person).
 
-% Amendment 20
-% Section 3 [TODO]
+% ----------------------------------------------
 
+% AMENDMENT 20 Section 3
+
+% Functors used
+% actingPresident/1 defines who the acting president is. 
+% test facts for actingPresident/1
+
+notQualified(president, true).  % set true if president is not qualified.
+notQualified(president, true).  % set true if vice president is not qualified.
+notChosen(president, true).     % set true if president is not chosen. 
+actingPresident(vicePresident) :- 
+    notQualified(president, true);
+    notChosen(president, true).
+
+actingPresident(providedByCongress) :-
+    notQualified(president, true),
+    notQualified(vicePresident, true).
 
 timeOfElection(congress).
 
@@ -684,7 +704,9 @@ eligible_for_president(Person) :-
     citizenEligible(Person),
     ageEligible(Person).
 
-% Amendment 25.
+% ----------------------------------------------
+
+% AMENDMENT 25.
 % newPresident/1 defines who the next president is.
 % nominate/1 defines when the vice president will be nominated.
 % actingPresident/1 defines when vice president becomes the acting president.
@@ -722,9 +744,6 @@ actingPresident(vicePresident):-
 actingPresident(vicePresident):-
     writtenDeclaration(vicePresident, _),
     writtenDeclaration(executive, _).
-
-compensation(president).
-oathPresident("I do solemnly swear (or affirm) that I will faithfully execute the Office of President of the United States, and will to the best of my Ability, preserve, protect and defend the Constitution of the United States").
 
 % ----------------------------------------------
 
@@ -1456,6 +1475,25 @@ assemblyOfCongress(X) :-
 
 % ----------------------------------------------
 
+% AMENDMENT 20 Section 3
+
+% Functors used
+% actingPresident/1 defines who the acting president is. 
+% test facts for actingPresident/1
+
+notQualified(president, true).  % set true if president is not qualified.
+notQualified(president, true).  % set true if vice president is not qualified.
+notChosen(president, true).     % set true if president is not chosen. 
+actingPresident(vicePresident) :- 
+    notQualified(president, true);
+    notChosen(president, true).
+
+actingPresident(providedByCongress) :-
+    notQualified(president, true),
+    notQualified(vicePresident, true).
+
+% ----------------------------------------------
+
 % AMENDMENT 20 Section 4
 
 death(president, choosenBy(houseOfRepresentatives)).
@@ -1545,6 +1583,47 @@ right(X, vote(election)) :- citizen(X,Y).
 % AMENDMENT 24 Section 2
 
 power(congress, enforce(amendment(24))).
+
+% ----------------------------------------------
+
+% AMENDMENT 25.
+% newPresident/1 defines who the next president is.
+% nominate/1 defines when the vice president will be nominated.
+% actingPresident/1 defines when vice president becomes the acting president.
+
+% test facts for Amendment 25
+removedFromOffice(president).       % if the president is removed from office.
+death(president).                   % if the president dies.
+resignation(president).             % if the president resigns.
+vacancies(vicePresident).           % if there are vacancies for vice president office.
+congressConsent(true).              % if the congress consents.
+
+% written declarations of various bodies.
+%% instructions: comment out any of the declarations to test under what conditions the vice president is appointed as an acting President.
+
+writtenDeclaration(president, "unable to discharge the powers and duties of his office").
+writtenDeclaration(vicePresident, "president is unable to discharge the powers and duties of his office").
+writtenDeclaration(executive, "president is unable to discharge the powers and duties of his office").
+
+%section 1
+newPresident(vicePresident) :-
+    removedFromOffice(president);
+    death(president);
+    resignation(president).
+
+%section 2 
+nominate(vicePresident) :-
+    vacancies(vicePresident),
+    congressConsent(true).
+
+%section 3
+actingPresident(vicePresident):-
+    writtenDeclaration(president, _).
+
+%section 4
+actingPresident(vicePresident):-
+    writtenDeclaration(vicePresident, _),
+    writtenDeclaration(executive, _).
 
 % ----------------------------------------------
 
