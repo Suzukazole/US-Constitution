@@ -73,24 +73,7 @@ officeOfProfit(bsh).    %test cases for notElector.
 notElector(Person) :- officeOfTrust(Person).
 notElector(Person) :- officeOfProfit(Person).
 
-% elector(X,Y) = houseOfRepresentatives(X,Z),senator(X,A),Y=Z+A.
-% qualified([X|T],elector) :- post(X,Y), Y \=senator, Y\=representative, Y\=person_holding_office, Y\=person_earning_profit, qualified([X|T],elector).
-
-
-% age_qualified(H,president) :- age(H,X), X >=35.
-% citizen_qualified(H,president) :- citizen(H,Y), Y >=14.
-% qualified([X|T],president) :- citizenship(X,natural_born),age_qualified(X,president),citizen_qualified(H,president).
-% qualified(X|T,president) :- citizenship(X,citizen_at_adoption_constitution),age_qualified(X,president),citizen_qualified(H,president).
-
-% removal(X,president) :- reason(X,death).
-% removal(X,president) :- reason(X,resignation).
-% removal(X,president) :- reason(X,inability_to_discharge).
-% reelection(X,president) :- elect(X,congress), 
-
-
-
-
-% Amendment 12
+% Amendment 12 [CHECK]
 
 % votes/2 defines who the elector can vote for(president, vice president).
 % state/2 defines the state of the first argument in the second argument.
@@ -108,7 +91,6 @@ notElector(Person) :- officeOfProfit(Person).
 % ageEligible/1 is true if the person is eligible by age.
 % compensation/1 defines that the body has a fixed compensation.
 % oathPresident/1 defines the oath of the president.
-
 
 votes(elector, president).
 votes(elector, vicePresident).
@@ -145,7 +127,7 @@ isVicePresident(Person) :- maxVicePresidentVotes(Person).
 eligible_for_vicePresident(Person) :- eligible_for_president(Person).
 
 % Amendment 20
-% Section 3 
+% Section 3 [TODO]
 
 
 timeOfElection(congress).
@@ -285,7 +267,7 @@ article(18, "repealed").
 % Section 2
 prohibitedInUS(violation("state liquour laws")).
 
-% Sction 3
+% Section 3 [CHECK]
 ammendmentInoperative(27):- ratifiedAmmendment(27).
 
 % Amendment 27 
